@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 
 public class ProductVariationDto {
 
-    private Long id;
+    private Integer id;
 
     private String colorType;
 

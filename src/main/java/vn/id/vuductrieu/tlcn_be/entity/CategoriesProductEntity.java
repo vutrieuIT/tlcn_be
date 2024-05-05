@@ -1,5 +1,6 @@
 package vn.id.vuductrieu.tlcn_be.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -21,7 +22,7 @@ public class CategoriesProductEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;
@@ -33,12 +34,14 @@ public class CategoriesProductEntity {
     private Integer position;
 
     @Column(name = "show_hide")
-    private Boolean showHide;
+    private Boolean show_hide;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "parent_category_id", referencedColumnName = "id")
     private CategoriesProductEntity parentCategory;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category", targetEntity = ProductEntity.class)
     private List<ProductEntity> products;
 }

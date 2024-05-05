@@ -1,44 +1,53 @@
 package vn.id.vuductrieu.tlcn_be.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
-import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "product_variation")
+@Table(name = "product_variations")
 @Data
 public class ProductVariationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
+
+    @Column(name = "image_url")
+    private String image_url;
+
+    @Column(name = "image_path")
+    private String image_path;
 
     @Column(name = "color_type")
-    private String colorType;
+    private String color_type;
 
     @Column(name = "price")
-    private Double price;
+    private String price;
 
     @Column(name = "price_sale")
-    private Double priceSale;
+    private String price_sale;
 
     @Column(name = "quantity")
     private Integer quantity;
 
     @Column(name = "quantity_available")
-    private Integer quantityAvailable;
+    private Integer quantity_available;
 
     @Column(name = "quantity_sold")
-    private Integer quantitySold;
+    private Integer quantity_sold;
+
+    @Column(name = "position")
+    private Integer position;
+
+    @Column(name = "show_hide")
+    private Integer show_hide;
 
     @JsonIgnore
     @ManyToOne

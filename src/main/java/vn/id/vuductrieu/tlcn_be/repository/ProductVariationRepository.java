@@ -7,7 +7,7 @@ import vn.id.vuductrieu.tlcn_be.entity.ProductVariationEntity;
 import java.util.List;
 
 @Repository
-public interface ProductVariationRepository extends JpaRepository<ProductVariationEntity, Long> {
+public interface ProductVariationRepository extends JpaRepository<ProductVariationEntity, Integer> {
 
-    List<ProductVariationEntity> findByProductId(Long productId);
+    List<ProductVariationEntity> findByProductId(Integer productId);
 }

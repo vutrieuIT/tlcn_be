@@ -16,37 +16,44 @@ import lombok.Data;
 import java.util.List;
 
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 @Data
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;
 
+    @Column(name = "slug")
+    private String slug;
+
     @Column(name = "seo_keywords")
-    private String seoKeywords;
+    private String seo_keywords;
+
+    @Column(name = "product_type")
+    private String product_type;
 
     @Column(name = "image_url")
-    private String imageUrl;
-
+    private String image_url;
 
     @Column(name = "brand_id")
-    private Long brandId;
+    private Integer brand_id;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "show_hide")
-    private Boolean showHide;
+    private Integer show_hide;
+
+    @Column(name= "status")
+    private String status;
 
     @OneToMany(mappedBy = "product", targetEntity = ProductVariationEntity.class, fetch = FetchType.LAZY)
     private List<ProductVariationEntity> variations;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categories_product_id", referencedColumnName = "id")
     private CategoriesProductEntity category;
 }

@@ -8,19 +8,14 @@ import vn.id.vuductrieu.tlcn_be.entity.ProductEntity;
 
 import java.util.List;
 
-public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
+public interface ProductRepository extends JpaRepository<ProductEntity, Integer> {
 
     List<ProductEntity> findAll();
 
     @Query("SELECT p FROM ProductEntity p")
     List<ProductEntity> find();
 
-    @Query("SELECT p, sum(pv.quantitySold) as totalSold "
-            + "FROM ProductEntity p left join"
-            + " ProductVariationEntity pv "
-            + "on p.id = pv.product.id "
-            + "order by totalSold desc "
-            + "limit ?1")
+    @Query("SELECT p FROM ProductEntity p")
     List<ProductEntity> findPopularProduct(int limit);
 
 }

@@ -1,6 +1,7 @@
 package vn.id.vuductrieu.tlcn_be.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import vn.id.vuductrieu.tlcn_be.entity.ProductVariationEntity;
 
@@ -11,19 +12,21 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductDto implements Serializable {
 
-    private Long id;
+    private Integer id;
 
     private String name;
 
-    private String seoKeywords;
+    private String seo_keywords;
 
-    private String imageUrl;
+    private String image_url;
 
-    private Long brandId;
+    private Integer brand_id;
 
     private String description;
 
-    private Boolean showHide;
+    private Boolean show_hide;
+
+    private CategoryDto category;
 
     private List<ProductVariationEntity> variations;
 }
