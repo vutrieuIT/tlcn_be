@@ -55,7 +55,7 @@ public class CheckoutService {
 
     public Map checkout(CheckoutDto checkoutDto) throws Exception {
         Integer userId = checkoutDto.getUser_id();
-        List<CartEntity> carts = checkoutRepository.findByUser_id(userId);
+        List<CartEntity> carts = checkoutRepository.selectByUserId(userId);
 
         if (carts.isEmpty()) {
             throw new IllegalArgumentException("Cart is empty");
