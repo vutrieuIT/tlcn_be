@@ -23,7 +23,6 @@ public class CartEntity {
     private Integer price;
     private Integer user_id;
     private Integer product_id;
-
     private Integer variant_id;
 
 }
