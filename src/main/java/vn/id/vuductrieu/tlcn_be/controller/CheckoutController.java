@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.id.vuductrieu.tlcn_be.dto.CheckoutDto;
-import vn.id.vuductrieu.tlcn_be.dto.RegisterDto;
+import vn.id.vuductrieu.tlcn_be.dto.UserDto;
 import vn.id.vuductrieu.tlcn_be.entity.OrderEntity;
 import vn.id.vuductrieu.tlcn_be.service.CheckoutService;
 

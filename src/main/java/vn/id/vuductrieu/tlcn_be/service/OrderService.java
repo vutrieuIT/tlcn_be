@@ -29,6 +29,7 @@ public class OrderService {
             OrderDto orderDto = new OrderDto();
             BeanUtils.copyProperties(order, orderDto);
             orderDto.setItems(items);
+            orderDtos.add(orderDto);
         }
         return orderDtos;
     }

@@ -5,8 +5,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import vn.id.vuductrieu.tlcn_be.constants.Constants;
 import vn.id.vuductrieu.tlcn_be.dto.LoginDto;
-import vn.id.vuductrieu.tlcn_be.dto.RegisterDto;
+import vn.id.vuductrieu.tlcn_be.dto.UserDto;
 import vn.id.vuductrieu.tlcn_be.entity.UserEntity;
 import vn.id.vuductrieu.tlcn_be.repository.UserRepository;
 
@@ -21,21 +22,22 @@ public class UserService {
 
     private final EmailService emailService;
 
-    public void register(RegisterDto registerDto) {
-        String error = validateRegisterDto(registerDto);
+    public void register(UserDto UserDto) {
+        String error = validateUserDto(UserDto);
         if (!error.isEmpty()) {
             throw new IllegalArgumentException(error);
         }
-        userRepository.findByEmail(registerDto.email).ifPresent(
+        userRepository.findByEmail(UserDto.email).ifPresent(
                 userEntity -> {
                     throw new IllegalArgumentException("Email is already taken");
                 }
         );
         UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(registerDto, userEntity);
+        BeanUtils.copyProperties(UserDto, userEntity);
 
-        String pwd = BCrypt.hashpw(registerDto.getPassword(), BCrypt.gensalt());
+        String pwd = BCrypt.hashpw(UserDto.getPassword(), BCrypt.gensalt());
         userEntity.setPassword(pwd);
+        userEntity.setRole(Constants.Role.USER.getValue());
         userRepository.save(userEntity);
 
     }
@@ -65,11 +67,11 @@ public class UserService {
         emailService.sendEmail(email, "Forgot password", "Your code is: " + code);
     }
 
-    public void changePasswordForgot(RegisterDto verifyUserDto) {
+    public void changePasswordForgot(UserDto verifyUserDto) {
         UserEntity userEntity = userRepository.findByEmail(verifyUserDto.getEmail()).orElseThrow(
                 () -> new IllegalArgumentException("Email not found")
         );
-        if (!Objects.equals(userEntity.getReset_code(), verifyUserDto.getReset_code())) {
+        if (!Objects.equals(userEntity.getReset_code(), verifyUserDto.getCode())) {
             throw new IllegalArgumentException("Code is incorrect");
         }
 
@@ -82,30 +84,33 @@ public class UserService {
         userRepository.save(userEntity);
     }
 
-    public void changePassword(RegisterDto changePasswordDto) {
-        UserEntity userEntity = userRepository.findByEmail(changePasswordDto.getEmail()).orElseThrow(
-                () -> new IllegalArgumentException("Email not found")
+    public void changePassword(UserDto changePasswordDto) {
+        UserEntity userEntity = userRepository.findById(Integer.parseInt(changePasswordDto.getUser_id())).orElseThrow(
+                () -> new IllegalArgumentException("user not found")
         );
+        if (!BCrypt.checkpw(changePasswordDto.getPassword_old(), userEntity.getPassword())) {
+            throw new IllegalArgumentException("Old password is incorrect");
+        }
         String pwd = BCrypt.hashpw(changePasswordDto.getPassword(), BCrypt.gensalt());
         userEntity.setPassword(pwd);
         userRepository.save(userEntity);
     }
 
-    private String validateRegisterDto(RegisterDto registerDto) {
+    private String validateUserDto(UserDto UserDto) {
         StringBuilder error = new StringBuilder();
-        if (registerDto.name == null || registerDto.name.isEmpty()) {
+        if (UserDto.name == null || UserDto.name.isEmpty()) {
             error.append("Name is required");
         }
-        if (registerDto.email == null || registerDto.email.isEmpty()) {
+        if (UserDto.email == null || UserDto.email.isEmpty()) {
             error.append("Email is required");
         }
-        if (registerDto.password == null || registerDto.password.isEmpty()) {
+        if (UserDto.password == null || UserDto.password.isEmpty()) {
             error.append("Password is required");
         }
-        if (registerDto.password_confirmation == null || registerDto.password_confirmation.isEmpty()) {
+        if (UserDto.password_confirmation == null || UserDto.password_confirmation.isEmpty()) {
             error.append("Password confirmation is required");
         }
-        if (Objects.equals(registerDto.password, registerDto.password_confirmation)) {
+        if (!Objects.equals(UserDto.password, UserDto.password_confirmation)) {
             error.append("Password and password confirmation must be the same");
         }
         return String.join(", ", error);

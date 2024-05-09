@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.id.vuductrieu.tlcn_be.dto.LoginDto;
-import vn.id.vuductrieu.tlcn_be.dto.RegisterDto;
+import vn.id.vuductrieu.tlcn_be.dto.UserDto;
 import vn.id.vuductrieu.tlcn_be.entity.UserEntity;
 import vn.id.vuductrieu.tlcn_be.service.UserService;
 
@@ -40,10 +40,10 @@ public class UserController {
         }
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody(required = false) RegisterDto registerDto) {
+    @PostMapping("/dang-ky")
+    public ResponseEntity<?> register(@RequestBody(required = false) UserDto UserDto) {
         try {
-            userService.register(registerDto);
+            userService.register(UserDto);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -65,7 +65,7 @@ public class UserController {
     }
 
     @PostMapping("/verify-code")
-    public ResponseEntity<?> changePasswordForgot(@RequestBody RegisterDto verifyCodeDto) {
+    public ResponseEntity<?> changePasswordForgot(@RequestBody UserDto verifyCodeDto) {
         try {
             userService.changePasswordForgot(verifyCodeDto);
             return ResponseEntity.ok().build();
@@ -77,7 +77,7 @@ public class UserController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(@RequestBody RegisterDto changePasswordDto) {
+    public ResponseEntity<?> changePassword(@RequestBody UserDto changePasswordDto) {
         try {
             userService.changePassword(changePasswordDto);
             return ResponseEntity.ok().build();

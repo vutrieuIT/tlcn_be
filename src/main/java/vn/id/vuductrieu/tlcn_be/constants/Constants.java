@@ -10,5 +10,9 @@ public class Constants {
         ADMIN(0),
         USER(1);
         private final int value;
+
+        public int getValue() {
+            return value;
+        }
     }
 }
