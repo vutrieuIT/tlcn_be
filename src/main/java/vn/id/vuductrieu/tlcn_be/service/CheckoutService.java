@@ -4,15 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.format.DateTimeFormatters;
 import org.springframework.stereotype.Service;
 import vn.id.vuductrieu.tlcn_be.VNPayConfig;
+import vn.id.vuductrieu.tlcn_be.config.Config;
 import vn.id.vuductrieu.tlcn_be.dto.CheckoutDto;
-import vn.id.vuductrieu.tlcn_be.dto.RegisterDto;
 import vn.id.vuductrieu.tlcn_be.entity.CartEntity;
 import vn.id.vuductrieu.tlcn_be.entity.OrderEntity;
 import vn.id.vuductrieu.tlcn_be.entity.OrderItemEntity;
-import vn.id.vuductrieu.tlcn_be.entity.UserEntity;
 import vn.id.vuductrieu.tlcn_be.repository.CartRepository;
 import vn.id.vuductrieu.tlcn_be.repository.CheckoutRepository;
 import vn.id.vuductrieu.tlcn_be.repository.OrderItemRepository;
@@ -22,16 +20,20 @@ import vn.id.vuductrieu.tlcn_be.repository.UserRepository;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -64,12 +66,14 @@ public class CheckoutService {
         Long totalPrice = 0L;
         OrderEntity order = new OrderEntity();
         order.setUser_id(userId);
-        order.setOrder_number("ORDER-" + System.currentTimeMillis());
+        order.setOrder_number(String.valueOf(System.currentTimeMillis()));
         order.setFull_name(checkoutDto.getFull_name());
         order.setPhone_number(checkoutDto.getPhone_number());
         order.setAddress(checkoutDto.getAddress());
         order.setDate_create(LocalDate.now());
         order.setTime_create(LocalTime.now());
+        order.setCreated_at(LocalDateTime.now());
+        order.setStatus("pending");
 
         orderRepository.save(order);
 
@@ -84,71 +88,10 @@ public class CheckoutService {
             orderItemRepository.save(orderItem);
         }
 
-        cartRepository.deleteByUser_id(userId);
+        List<CartEntity> cartEntities = cartRepository.selectByUserId(userId);
+        cartRepository.deleteAll(cartEntities);
 
-        String vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        String vnp_Returnurl = "http://localhost:8080/api/checkpayment";
-        String vnp_TmnCode = "MNV5UXO7";
-        String vnp_HashSecret = "LBKBRQXZXEYAIAINDKMVJLBYOJEZITIL";
-
-        String vnp_TxnRef = order.getId().toString();
-        String vnp_OrderInfo = "Thanh toán đơn hàng";
-        String vnp_OrderType = "bank";
-        String vnp_Amount = totalPrice.toString();
-        String vnp_Locale = "vn";
-        String vnp_BankCode = "NCB";
-        String vnp_IpAddr = "http://localhost:8080/api/checkpayment";
-
-        Map<String, String> inputParam = new HashMap<>();
-        inputParam.put("vnp_Version", "2.1.0");
-        inputParam.put("vnp_TmnCode", vnp_TmnCode);
-        inputParam.put("vnp_Amount", vnp_Amount);
-        inputParam.put("vnp_Command", "pay");
-
-        inputParam.put("vnp_CreateDate", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
-        inputParam.put("vnp_CurrCode", "VND");
-        inputParam.put("vnp_IpAddr", vnp_IpAddr);
-        inputParam.put("vnp_Locale", vnp_Locale);
-        inputParam.put("vnp_OrderInfo", vnp_OrderInfo);
-        inputParam.put("vnp_OrderType", vnp_OrderType);
-        inputParam.put("vnp_ReturnUrl", vnp_Returnurl);
-        inputParam.put("vnp_TxnRef", vnp_TxnRef);
-
-        if (vnp_BankCode != null && !vnp_BankCode.isEmpty()) {
-            inputParam.put("vnp_BankCode", vnp_BankCode);
-        }
-
-        List fieldNames = new ArrayList(inputParam.keySet());
-        Collections.sort(fieldNames);
-        StringBuilder hashData = new StringBuilder();
-        StringBuilder query = new StringBuilder();
-        Iterator itr = fieldNames.iterator();
-
-        while (itr.hasNext()) {
-            String fieldName = (String) itr.next();
-            String fieldValue = inputParam.get(fieldName);
-            if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                // Build hash data
-                hashData.append(fieldName);
-                hashData.append('=');
-                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
-                // Build query
-                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII));
-                query.append('=');
-                query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
-
-                if (itr.hasNext()) {
-                    query.append('&');
-                    hashData.append('&');
-                }
-            }
-        }
-
-        String queryUrl = query.toString();
-        String salt = VNPayConfig.vnp_HashSecret;
-        String vnp_SecureHash = VNPayConfig.hmacSHA512(salt, hashData.toString());
-        queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
-        String paymentUrl = VNPayConfig.vnp_PayUrl + "?" + queryUrl;
+        String paymentUrl = createPaymentUrl(totalPrice, order.getId().toString());
 
         Map returnData = new HashMap();
         returnData.put("code", "00");
@@ -157,34 +100,79 @@ public class CheckoutService {
         return Map.of("redirect_url", paymentUrl);
     }
 
-    public int checkPayment(HttpServletRequest request) {
-        Map fields = new HashMap();
-        for (Enumeration params = request.getParameterNames(); params.hasMoreElements();) {
-            String fieldName = null;
-            String fieldValue = null;
-            fieldName = URLEncoder.encode((String) params.nextElement(), StandardCharsets.US_ASCII);
-            fieldValue = URLEncoder.encode(request.getParameter(fieldName), StandardCharsets.US_ASCII);
-            if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                fields.put(fieldName, fieldValue);
-            }
-        }
+    public String createPaymentUrl(Long amoutPay, String billCode) {
+        String vnp_Version = "2.1.0";
+        String vnp_Command = "pay";
+        String orderType = "other";
+        long vn2usd = 23200;
+        long amount = amoutPay * 100 * vn2usd;
 
-        String vnp_SecureHash = request.getParameter("vnp_SecureHash");
-        if (fields.containsKey("vnp_SecureHashType")) {
-            fields.remove("vnp_SecureHashType");
-        }
-        if (fields.containsKey("vnp_SecureHash")) {
-            fields.remove("vnp_SecureHash");
-        }
-        String signValue = VNPayConfig.hashAllFields(fields);
-        if (signValue.equals(vnp_SecureHash)) {
-            if ("00".equals(request.getParameter("vnp_TransactionStatus"))) {
-                return 1;
-            } else {
-                return 0;
+        String vnp_TxnRef = billCode;
+
+        String vnp_TmnCode = Config.vnp_TmnCode;
+
+        Map<String, String> vnp_Params = new HashMap<>();
+        vnp_Params.put("vnp_Version", vnp_Version);
+        vnp_Params.put("vnp_Command", vnp_Command);
+        vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
+        vnp_Params.put("vnp_Amount", String.valueOf(amount));
+        vnp_Params.put("vnp_CurrCode", "VND");
+
+        vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
+        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
+        vnp_Params.put("vnp_OrderType", orderType);
+
+        vnp_Params.put("vnp_Locale", "vn");
+
+        vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
+
+        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String vnp_CreateDate = formatter.format(cld.getTime());
+        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
+
+        cld.add(Calendar.MINUTE, 15);
+        String vnp_ExpireDate = formatter.format(cld.getTime());
+        vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
+
+        vnp_Params.put("vnp_IpAddr", "http://localhost:5173/lazi-store/checkpayment");
+
+        List fieldNames = new ArrayList(vnp_Params.keySet());
+        Collections.sort(fieldNames);
+        StringBuilder hashData = new StringBuilder();
+        StringBuilder query = new StringBuilder();
+        Iterator itr = fieldNames.iterator();
+        while (itr.hasNext()) {
+            String fieldName = (String) itr.next();
+            String fieldValue = (String) vnp_Params.get(fieldName);
+            if ((fieldValue != null) && (fieldValue.length() > 0)) {
+                //Build hash data
+                hashData.append(fieldName);
+                hashData.append('=');
+                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
+                //Build query
+                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII));
+                query.append('=');
+                query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
+                if (itr.hasNext()) {
+                    query.append('&');
+                    hashData.append('&');
+                }
             }
-        } else {
-            return -1;
         }
+        String queryUrl = query.toString();
+        String vnp_SecureHash = Config.hmacSHA512(Config.secretKey, hashData.toString());
+        queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
+        String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;
+        return paymentUrl;
+    }
+
+    public void checkPayment(Map<String, String> request) {
+        OrderEntity orderEntity = orderRepository.findById(Integer.valueOf(request.get("orderId"))).orElseThrow(
+                () -> new IllegalArgumentException("Order not found")
+        );
+        orderEntity.setStatus(request.get("status"));
+        orderEntity.setUpdated_at(LocalDateTime.now());
+        orderRepository.save(orderEntity);
     }
 }

@@ -40,7 +40,7 @@ public class UserService {
 
     }
 
-    public void login(LoginDto loginDto) {
+    public UserEntity login(LoginDto loginDto) {
         String error = validateLoginDto(loginDto);
         if (!error.isEmpty()) {
             throw new IllegalArgumentException(error);
@@ -51,6 +51,7 @@ public class UserService {
         if (!BCrypt.checkpw(loginDto.password, userEntity.getPassword())) {
             throw new IllegalArgumentException("Password is incorrect");
         }
+        return userEntity;
     }
 
     public void forgotPassword(String email) {

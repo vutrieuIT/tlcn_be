@@ -42,6 +42,6 @@ public class CategoriesProductEntity {
     private CategoriesProductEntity parentCategory;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "category", targetEntity = ProductEntity.class)
+    @OneToMany(mappedBy = "category", targetEntity = ProductEntity.class, fetch = FetchType.LAZY)
     private List<ProductEntity> products;
 }

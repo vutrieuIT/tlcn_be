@@ -35,9 +35,6 @@ public class ProductEntity {
     @Column(name = "product_type")
     private String product_type;
 
-    @Column(name = "image_url")
-    private String image_url;
-
     @Column(name = "brand_id")
     private Integer brand_id;
 
@@ -56,4 +53,19 @@ public class ProductEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categories_product_id", referencedColumnName = "id")
     private CategoriesProductEntity category;
+
+    @Override
+    public String toString() {
+        return "ProductEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", slug='" + slug + '\'' +
+                ", seo_keywords='" + seo_keywords + '\'' +
+                ", product_type='" + product_type + '\'' +
+                ", brand_id=" + brand_id +
+                ", description='" + description + '\'' +
+                ", show_hide=" + show_hide +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

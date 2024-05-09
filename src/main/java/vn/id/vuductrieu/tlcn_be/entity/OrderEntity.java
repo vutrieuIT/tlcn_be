@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -28,8 +29,11 @@ public class OrderEntity {
     private String full_name;
     private String phone_number;
     private String address;
-    private String status;
     private Integer user_id;
     private LocalDate date_create;
     private LocalTime time_create;
+    private LocalDateTime created_at;
+    private LocalDateTime updated_at;
+
+    private String status;
 }

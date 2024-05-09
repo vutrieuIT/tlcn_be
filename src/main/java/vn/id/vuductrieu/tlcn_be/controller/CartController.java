@@ -1,9 +1,11 @@
 package vn.id.vuductrieu.tlcn_be.controller;
 
+import ch.qos.logback.core.model.INamedModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,29 +32,29 @@ public class CartController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("An error occurred");
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
-    @PostMapping()
+    @PostMapping("/carts")
     public ResponseEntity<?> getCartsByUserId(@RequestBody CartEntity cartEntity){
         try {
             List<CartDto> carts = cartService.getCartsByUserId(cartEntity.getUser_id());
             return ResponseEntity.ok(carts);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("An error occurred");
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
     @DeleteMapping("/carts/{id}")
-    public ResponseEntity<?> deleteCart(@RequestBody CartEntity cartEntity){
+    public ResponseEntity<?> deleteCart(@PathVariable("id") Integer id){
         try {
-            cartService.deleteCart(cartEntity.getId());
+            cartService.deleteCart(id);
             return ResponseEntity.ok("Deleted cart successfully");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("An error occurred");
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
@@ -64,7 +66,7 @@ public class CartController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("An error occurred");
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 }

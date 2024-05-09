@@ -13,6 +13,9 @@ import vn.id.vuductrieu.tlcn_be.dto.RegisterDto;
 import vn.id.vuductrieu.tlcn_be.entity.UserEntity;
 import vn.id.vuductrieu.tlcn_be.service.UserService;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -23,8 +26,13 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody(required = false) LoginDto loginDto) {
         try {
-            userService.login(loginDto);
-            return ResponseEntity.ok().build();
+            UserEntity userEntity = userService.login(loginDto);
+            Map<String, Object> response = Map.of(
+                    "id", userEntity.getId(),
+                    "email", userEntity.getEmail(),
+                    "name", userEntity.getName()
+            );
+            return ResponseEntity.ok().body(List.of(response));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {

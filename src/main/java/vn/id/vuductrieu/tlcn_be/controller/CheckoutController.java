@@ -34,14 +34,14 @@ public class CheckoutController {
     }
 
     @PostMapping("/checkpayment")
-    public ResponseEntity<?> checkPayment(HttpServletRequest request) {
+    public ResponseEntity<?> checkPayment(@RequestBody Map<String, String> request) {
         try {
-            int res = checkoutService.checkPayment(request);
-            return res == 1
-                    ? ResponseEntity.ok("Thanh toán thành công")
-                    : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Thanh toán thất bại");
-        } catch (Exception e) {
+            checkoutService.checkPayment(request);
+             return ResponseEntity.ok("Thanh toán thành công");
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }
