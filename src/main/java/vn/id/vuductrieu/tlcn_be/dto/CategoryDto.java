@@ -1,15 +1,11 @@
 package vn.id.vuductrieu.tlcn_be.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.Data;
 import vn.id.vuductrieu.tlcn_be.entity.ProductEntity;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -25,6 +21,10 @@ public class CategoryDto implements Serializable {
     private Integer position;
 
     private Boolean showHide;
+
+    private LocalDateTime created_at;
+
+    private LocalDateTime updated_at;
 
     private List<ProductEntity> products;
 }

@@ -18,7 +18,7 @@ import java.util.List;
 @Entity
 @Table(name = "categories_products")
 @Data
-public class CategoriesProductEntity {
+public class CategoriesProductEntity extends SystemField {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
