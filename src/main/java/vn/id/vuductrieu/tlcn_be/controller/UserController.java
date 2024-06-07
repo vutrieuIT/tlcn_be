@@ -2,7 +2,6 @@ package vn.id.vuductrieu.tlcn_be.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +11,7 @@ import vn.id.vuductrieu.tlcn_be.dto.LoginDto;
 import vn.id.vuductrieu.tlcn_be.dto.UserDto;
 import vn.id.vuductrieu.tlcn_be.entity.UserEntity;
 import vn.id.vuductrieu.tlcn_be.service.UserService;
+import vn.id.vuductrieu.tlcn_be.utils.TokenUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +23,8 @@ public class UserController {
 
     private final UserService userService;
 
+    private final TokenUtils tokenUtils;
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody(required = false) LoginDto loginDto) {
         try {
@@ -30,9 +32,10 @@ public class UserController {
             Map<String, Object> response = Map.of(
                     "id", userEntity.getId(),
                     "email", userEntity.getEmail(),
-                    "name", userEntity.getName()
+                    "name", userEntity.getName(),
+                    "token", tokenUtils.generateToken(userEntity)
             );
-            return ResponseEntity.ok().body(List.of(response));
+            return ResponseEntity.ok().body(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
