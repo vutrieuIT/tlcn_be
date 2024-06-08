@@ -20,7 +20,7 @@ public class CategoryDto implements Serializable {
 
     private Integer position;
 
-    private Boolean showHide;
+    private Boolean show_hide;
 
     private LocalDateTime created_at;
 

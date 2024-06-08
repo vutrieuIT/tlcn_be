@@ -30,6 +30,9 @@ public class CategoriesProductEntity extends SystemField {
     @Column(name = "slug")
     private String slug;
 
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "position")
     private Integer position;
 
