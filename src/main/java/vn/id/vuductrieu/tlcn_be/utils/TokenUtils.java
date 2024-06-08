@@ -1,8 +1,10 @@
 package vn.id.vuductrieu.tlcn_be.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import vn.id.vuductrieu.tlcn_be.entity.UserEntity;
 
@@ -14,9 +16,11 @@ import java.util.Date;
 @Component
 public class TokenUtils {
 
-    // Sử dụng giá trị mã hóa Base64 hợp lệ
-    private final String SECRET_KEY = "bXlfc2VjcmV0X2tleQ==";  // Base64 encoded string
-    private final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hour in milliseconds
+    @Value("${myapp.security.jwt.secret:bXlfc2VjcmV0X2tleQ==}")
+    private String SECRET_KEY;
+
+    @Value("${myapp.security.jwt.expiration:3600000}")
+    private long EXPIRATION_TIME;
 
     // Tạo JWT token
     public String generateToken(UserEntity userEntity) {
@@ -50,6 +54,7 @@ public class TokenUtils {
         } catch (Exception e) {
             return false;
         }
+
     }
 
     private Key getSigningKey() {
