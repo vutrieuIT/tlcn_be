@@ -18,7 +18,7 @@ import java.util.List;
 @Entity
 @Table(name = "products")
 @Data
-public class ProductEntity {
+public class ProductEntity extends SystemField {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

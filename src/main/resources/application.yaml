@@ -32,6 +32,6 @@ myapp:
   security:
     jwt:
       secret: bXlfc2VjcmV0X2tleQ==
-      expiration: 3600000 # 1 hour
+      expiration: 86400000 #3600000 # 1 hour
 
 

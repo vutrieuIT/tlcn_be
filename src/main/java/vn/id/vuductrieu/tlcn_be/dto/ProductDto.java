@@ -20,11 +20,13 @@ public class ProductDto implements Serializable {
 
     private String image_url;
 
+    private Integer category_id;
+
     private Integer brand_id;
 
     private String description;
 
-    private Boolean show_hide;
+    private Integer show_hide;
 
     private CategoryDto category;
 
