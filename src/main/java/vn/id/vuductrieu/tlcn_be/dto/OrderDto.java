@@ -14,5 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderDto extends OrderEntity {
 
+    private Integer total;
     List<OrderItemEntity> items;
 }
