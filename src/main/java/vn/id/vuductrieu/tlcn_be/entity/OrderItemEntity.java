@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Table(name = "order_items")
 @Entity
 @Data
@@ -29,4 +31,7 @@ public class OrderItemEntity {
 
     private Integer variant_id;
 
+    private LocalDate created_at;
+
+    private LocalDate updated_at;
 }
