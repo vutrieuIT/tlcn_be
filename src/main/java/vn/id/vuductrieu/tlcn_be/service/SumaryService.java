@@ -27,10 +27,11 @@ public class SumaryService {
         }
 
         Long dateSeparate = diff.toDays() / 10;
+        LocalDate baseDate = startDate.minusDays(1);
 
         for (int i = 0; i < 9; i++) {
-            LocalDate from = startDate.plusDays(dateSeparate * i);
-            LocalDate to = startDate.plusDays(dateSeparate * (i + 1));
+            LocalDate from = baseDate.plusDays(dateSeparate * i + 1);
+            LocalDate to = baseDate.plusDays(dateSeparate * (i + 1));
             Long sum = orderItemRepository.findForSumarySales(from, to);
             if (sum == null) sum = 0L;
             result.add(sum);
@@ -53,10 +54,11 @@ public class SumaryService {
         }
 
         Long dateSeparate = diff.toDays() / 10;
+        LocalDate baseDate = startDate.minusDays(1);
 
         for (int i = 0; i < 9; i++) {
-            LocalDate from = startDate.plusDays(dateSeparate * i);
-            LocalDate to = startDate.plusDays(dateSeparate * (i + 1));
+            LocalDate from = baseDate.plusDays(dateSeparate * i + 1);
+            LocalDate to = baseDate.plusDays(dateSeparate * (i + 1));
             Long sum = orderItemRepository.findForSumaryRevenue(from, to);
             if (sum == null) sum = 0L;
             result.add(sum);
