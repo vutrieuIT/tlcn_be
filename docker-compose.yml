@@ -9,6 +9,8 @@ services:
       MYSQL_DATABASE: tlcn
     ports:
       - 3307:3306
+    volumes:
+      - ./mysql:/var/lib/mysql
 
   be:
     image: trieuvu/tlcn-be
