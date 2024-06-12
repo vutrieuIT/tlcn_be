@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: tlcn
+    ports:
+      - 3307:3306
+
+  be:
+    image: trieuvu/tlcn-be
+    environment:
+      - APP_DB_URL=jdbc:mysql://db:3306/tlcn
+      - APP_DB_USERNAME=root
+      - APP_DB_PASSWORD=12345
+    ports:
+      - 8001:8001 
+    depends_on:
+      - db
