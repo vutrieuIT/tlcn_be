@@ -3,6 +3,7 @@ package vn.id.vuductrieu.tlcn_be.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.id.vuductrieu.tlcn_be.dto.LoginDto;
 import vn.id.vuductrieu.tlcn_be.dto.UserDto;
 import vn.id.vuductrieu.tlcn_be.entity.UserEntity;
+import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 import vn.id.vuductrieu.tlcn_be.service.UserService;
 import vn.id.vuductrieu.tlcn_be.utils.TokenUtils;
 
@@ -22,6 +24,8 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+
+    private final PermissionService permissionService;
 
     private final TokenUtils tokenUtils;
 
@@ -96,4 +100,35 @@ public class UserController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+
+    @GetMapping("/all-user")
+    public ResponseEntity<?> getAllUser() {
+        try {
+            if (!permissionService.isAdmin()){
+                return ResponseEntity.status(403).body("you need admin role");
+            }
+            List<UserEntity> userEntities = userService.getAllUser();
+            return ResponseEntity.ok().body(userEntities);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/user/status")
+    public ResponseEntity<?> getAllUser(@RequestBody UserEntity userEntity) {
+        try {
+            if (!permissionService.isAdmin()){
+                return ResponseEntity.status(403).body("you need admin role");
+            }
+            userService.updateStatus(userEntity);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
 }

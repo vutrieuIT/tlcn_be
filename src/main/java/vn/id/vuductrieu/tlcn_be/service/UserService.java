@@ -12,6 +12,8 @@ import vn.id.vuductrieu.tlcn_be.entity.UserEntity;
 import vn.id.vuductrieu.tlcn_be.repository.UserRepository;
 
 import java.util.Base64;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -50,7 +52,7 @@ public class UserService {
         UserEntity userEntity = userRepository.findByEmail(loginDto.email).orElseThrow(
                 () -> new IllegalArgumentException("Email not found")
         );
-        if (userEntity.getStatus() == Constants.Status.INACTIVE.getValue()){
+        if (userEntity.getStatus() == Constants.Status.INACTIVE.getValue()) {
             throw new IllegalArgumentException("account in inactive");
         }
         if (!BCrypt.checkpw(loginDto.password, userEntity.getPassword())) {
@@ -128,5 +130,17 @@ public class UserService {
             error.append("Password is required");
         }
         return String.join(", ", error);
+    }
+
+    public List<UserEntity> getAllUser() {
+        List<UserEntity> userEntities = userRepository.findAll();
+        return userEntities;
+    }
+
+    public void updateStatus(UserEntity userEntity) {
+        UserEntity user = userRepository.findByEmail(userEntity.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("email not found"));
+        user.setStatus(userEntity.getStatus());
+        userRepository.save(user);
     }
 }
