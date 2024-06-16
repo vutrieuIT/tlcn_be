@@ -14,6 +14,7 @@ WORKDIR /app
 ENV APP_DB_URL=jdbc:mysql://host.docker.internal:3306/tlcn
 ENV APP_DB_USERNAME=root
 ENV APP_DB_PASSWORD=12345
+ENV TZ=Asia/Ho_Chi_Minh
 
 EXPOSE 8001
 COPY --from=build /app/target/*.jar app.jar
