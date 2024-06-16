@@ -22,7 +22,7 @@ public class UserService {
 
     private final EmailService emailService;
 
-    public void register(UserDto UserDto) {
+    public UserEntity register(UserDto UserDto) {
         String error = validateUserDto(UserDto);
         if (!error.isEmpty()) {
             throw new IllegalArgumentException(error);
@@ -38,8 +38,8 @@ public class UserService {
         String pwd = BCrypt.hashpw(UserDto.getPassword(), BCrypt.gensalt());
         userEntity.setPassword(pwd);
         userEntity.setRole(Constants.Role.USER.getValue());
-        userRepository.save(userEntity);
-
+        userEntity.setStatus(Constants.Status.ACTIVE.getValue());
+        return userRepository.save(userEntity);
     }
 
     public UserEntity login(LoginDto loginDto) {
@@ -50,6 +50,9 @@ public class UserService {
         UserEntity userEntity = userRepository.findByEmail(loginDto.email).orElseThrow(
                 () -> new IllegalArgumentException("Email not found")
         );
+        if (userEntity.getStatus() == Constants.Status.INACTIVE.getValue()){
+            throw new IllegalArgumentException("account in inactive");
+        }
         if (!BCrypt.checkpw(loginDto.password, userEntity.getPassword())) {
             throw new IllegalArgumentException("Password is incorrect");
         }

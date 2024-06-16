@@ -14,4 +14,16 @@ public class Constants {
             return value;
         }
     }
+
+    @RequiredArgsConstructor
+    public enum Status {
+
+        ACTIVE("active"),
+        INACTIVE("inactive");
+        private final String value;
+
+        public String getValue() {
+            return value;
+        }
+    }
 }

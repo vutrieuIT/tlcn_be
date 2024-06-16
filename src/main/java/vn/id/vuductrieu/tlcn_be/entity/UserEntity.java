@@ -25,6 +25,8 @@ public class UserEntity {
 
     private String password;
 
+    private String status;
+
     private String reset_code;
 
     private Integer role;

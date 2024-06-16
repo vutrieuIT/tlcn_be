@@ -46,8 +46,14 @@ public class UserController {
     @PostMapping("/dang-ky")
     public ResponseEntity<?> register(@RequestBody(required = false) UserDto UserDto) {
         try {
-            userService.register(UserDto);
-            return ResponseEntity.ok().build();
+            UserEntity userEntity = userService.register(UserDto);
+            Map<String, Object> response = Map.of(
+                    "id", userEntity.getId(),
+                    "email", userEntity.getEmail(),
+                    "name", userEntity.getName(),
+                    "token", tokenUtils.generateToken(userEntity)
+            );
+            return ResponseEntity.ok().body(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
