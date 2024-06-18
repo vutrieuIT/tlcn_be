@@ -135,7 +135,9 @@ public class CheckoutService {
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
-        vnp_Params.put("vnp_IpAddr", "http://localhost:5173/lazi-store/checkpayment");
+        String userIp = request.getRemoteAddr();
+
+        vnp_Params.put("vnp_IpAddr", "http://" + userIp + "/lazi-store/checkpayment");
 
         List fieldNames = new ArrayList(vnp_Params.keySet());
         Collections.sort(fieldNames);
