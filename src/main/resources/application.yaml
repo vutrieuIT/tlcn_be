@@ -25,6 +25,10 @@ spring:
           auth: true
           starttls:
             enable: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
 server:
   port: 8001
 
