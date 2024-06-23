@@ -47,6 +47,24 @@ public class UserController {
         }
     }
 
+    @PostMapping("/login-google")
+    public ResponseEntity<?> loginGoogle(@RequestBody(required = false) String clientToken) {
+        try {
+            UserEntity userEntity = userService.loginGoogle(clientToken);
+            Map<String, Object> response = Map.of(
+                    "id", userEntity.getId(),
+                    "email", userEntity.getEmail(),
+                    "name", userEntity.getName(),
+                    "token", tokenUtils.generateToken(userEntity)
+            );
+            return ResponseEntity.ok().body(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
     @PostMapping("/dang-ky")
     public ResponseEntity<?> register(@RequestBody(required = false) UserDto UserDto) {
         try {

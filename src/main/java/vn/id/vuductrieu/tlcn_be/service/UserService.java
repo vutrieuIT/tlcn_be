@@ -1,5 +1,7 @@
 package vn.id.vuductrieu.tlcn_be.service;
 
+import com.google.auth.oauth2.TokenVerifier;
+import io.github.cdimascio.dotenv.Dotenv;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,5 +144,35 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("email not found"));
         user.setStatus(userEntity.getStatus());
         userRepository.save(user);
+    }
+
+    public UserEntity loginGoogle(String clientToken) {
+        if (!verifyTokenGoogle(clientToken)) {
+            throw new IllegalArgumentException("Token is invalid");
+        }
+        String[] split = clientToken.split("\\.");
+        String payload = new String(Base64.getDecoder().decode(split[1]));
+        String email = payload.split("\"email\":\"")[1].split("\"")[0];
+        UserEntity userEntity = userRepository.findByEmail(email).orElseGet(() -> {
+            UserEntity user = new UserEntity();
+            user.setEmail(email);
+            user.setName(payload.split("\"name\":\"")[1].split("\"")[0]);
+            user.setRole(Constants.Role.USER.getValue());
+            user.setStatus(Constants.Status.ACTIVE.getValue());
+            return userRepository.save(user);
+        });
+        return userEntity;
+    }
+
+    public boolean verifyTokenGoogle(String clientToken){
+        try {
+            TokenVerifier verifier = TokenVerifier.newBuilder()
+                    .setAudience(Dotenv.load().get("GOOGLE_CLIENT_ID"))
+                    .build();
+            verifier.verify(clientToken);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 }
