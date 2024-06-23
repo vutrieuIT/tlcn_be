@@ -159,6 +159,7 @@ public class UserService {
             user.setName(payload.split("\"name\":\"")[1].split("\"")[0]);
             user.setRole(Constants.Role.USER.getValue());
             user.setStatus(Constants.Status.ACTIVE.getValue());
+            user.setPassword("");
             return userRepository.save(user);
         });
         return userEntity;
