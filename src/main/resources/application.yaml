@@ -31,11 +31,15 @@ spring:
       max-file-size: 5MB
 server:
   port: 8001
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-password: p@ssw0rd
+    keyStoreType: PKCS12
+    keyAlias: tomcat
 
 myapp:
   security:
     jwt:
       secret: bXlfc2VjcmV0X2tleQ==
       expiration: 86400000 #3600000 # 1 hour
-
 
