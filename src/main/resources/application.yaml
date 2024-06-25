@@ -17,8 +17,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${APP_MAIL_USER:shop.vuductrieu@gmail.com}
-    password: ${APP_MAIL_PASS:majfygbwgunueusw}
+    username: ${APP_MAIL_USER:username@gmail.com}
+    password: ${APP_MAIL_PASS:password}
     properties:
       mail:
         smtp:
@@ -33,7 +33,7 @@ server:
   port: 8443
   ssl:
     key-store: classpath:keystore.p12
-    key-store-password: ${APP_KEYSTORE_PASS:p@ssw0rd}
+    key-store-password: ${APP_KEYSTORE_PASS:password}
     keyStoreType: PKCS12
     keyAlias: tomcat
   http:
