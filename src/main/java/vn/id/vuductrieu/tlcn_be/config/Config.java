@@ -1,6 +1,8 @@
 
 package vn.id.vuductrieu.tlcn_be.config;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
@@ -21,7 +23,7 @@ import java.util.Random;
 public class Config {
 
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_ReturnUrl = "http://localhost:5173/lazi-store/checkpayment";
+    public static String vnp_ReturnUrl = Dotenv.load().get("APP_HOST") + "/lazi-store/checkpayment";
     public static String vnp_TmnCode = "9W9C1DDC";
     public static String secretKey = "JS7LEGFLCE0CXWU8HU5ERGSJIDJ104Z1";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
