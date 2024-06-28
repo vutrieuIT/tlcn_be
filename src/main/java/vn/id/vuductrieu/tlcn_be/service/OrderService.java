@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.id.vuductrieu.tlcn_be.dto.OrderDto;
 import vn.id.vuductrieu.tlcn_be.entity.OrderEntity;
@@ -37,7 +38,8 @@ public class OrderService {
 
     public List<OrderDto> getAllOrder() {
         List<OrderDto> orderDtos = new ArrayList<>();
-        List<OrderEntity> orders = orderRepository.findAll();
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        List<OrderEntity> orders = orderRepository.findAll(sort);
         for (OrderEntity order : orders) {
             List<OrderItemEntity> items = orderItemService.findAllByOrder_id(order.getId());
             OrderDto orderDto = new OrderDto();

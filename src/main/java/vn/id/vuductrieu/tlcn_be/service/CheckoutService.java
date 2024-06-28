@@ -17,18 +17,15 @@ import vn.id.vuductrieu.tlcn_be.repository.OrderItemRepository;
 import vn.id.vuductrieu.tlcn_be.repository.OrderRepository;
 import vn.id.vuductrieu.tlcn_be.repository.UserRepository;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -72,7 +69,7 @@ public class CheckoutService {
         order.setAddress(checkoutDto.getAddress());
         order.setDate_create(LocalDate.now());
         order.setTime_create(LocalTime.now());
-        order.setCreated_at(LocalDateTime.now());
+        order.setCreatedAt(LocalDateTime.now());
         order.setStatus("pending");
 
         orderRepository.save(order);
