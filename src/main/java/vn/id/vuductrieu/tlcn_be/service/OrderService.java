@@ -55,4 +55,26 @@ public class OrderService {
         order.setStatus(status);
         orderRepository.save(order);
     }
+
+    public OrderDto getOrderDetail(int id, Integer userId) {
+        if (userId != null) {
+            OrderEntity order = orderRepository.findByIdAndUser_id(id, userId).orElseThrow(() -> new EmptyResultDataAccessException("Order not found", 1));
+            List<OrderItemEntity> items = orderItemService.findAllByOrder_id(order.getId());
+            OrderDto orderDto = new OrderDto();
+            BeanUtils.copyProperties(order, orderDto);
+            orderDto.setItems(items);
+            return orderDto;
+        } else {
+            return getOrderDetail(id);
+        }
+    }
+
+    public OrderDto getOrderDetail(int id) {
+        OrderEntity order = orderRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException("Order not found", 1));
+        List<OrderItemEntity> items = orderItemService.findAllByOrder_id(order.getId());
+        OrderDto orderDto = new OrderDto();
+        BeanUtils.copyProperties(order, orderDto);
+        orderDto.setItems(items);
+        return orderDto;
+    }
 }

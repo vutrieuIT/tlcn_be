@@ -33,4 +33,21 @@ public class PermissionService {
             return false;
         }
     }
+
+    public Integer getUserId() {
+        try {
+            String token = request.getHeader("Authorization");
+            if (token == null || !token.startsWith("Bearer ")) {
+                return null;
+            }
+
+            if (!tokenUtils.validateToken(token.substring(7))) {
+                return null;
+            }
+
+            return tokenUtils.getClaimsFromToken(token.substring(7)).get("id", Integer.class);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

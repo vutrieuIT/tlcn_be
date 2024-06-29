@@ -12,9 +12,9 @@ public interface OrderItemRepository extends JpaRepository<OrderItemEntity, Inte
     @Query(value = "select o from OrderItemEntity o where o.order_id = ?1")
     List<OrderItemEntity> findAllByOrder_id(Integer id);
 
-    @Query(value = "select sum(o.quantity) from OrderItemEntity o where o.created_at >= ?1 and o.created_at <= ?2")
+    @Query(value = "select sum(o.quantity) from OrderItemEntity o where o.createdAt >= ?1 and o.createdAt <= ?2")
     Long findForSumarySales(LocalDate startDate, LocalDate endDate);
 
-    @Query(value = "select sum(o.quantity*o.price) from OrderItemEntity o where o.created_at >= ?1 and o.created_at <= ?2")
+    @Query(value = "select sum(o.quantity*o.price) from OrderItemEntity o where o.createdAt >= ?1 and o.createdAt <= ?2")
     Long findForSumaryRevenue(LocalDate startDate, LocalDate endDate);
 }

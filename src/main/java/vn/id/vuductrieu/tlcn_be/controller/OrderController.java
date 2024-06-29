@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,6 +58,31 @@ public class OrderController {
             }
             orderService.updateOrder(order.get("id").asInt(), order.get("status").asText());
             return ResponseEntity.ok(Map.of("message", "Update order successfully"));
+        } catch (EmptyResultDataAccessException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Order not found"));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/order-detail/{id}")
+    public ResponseEntity<?> getOrderDetail(@PathVariable Integer id){
+        try {
+            if (permissionService.isAdmin()) {
+                OrderDto orderDto = orderService.getOrderDetail(id, null);
+                return ResponseEntity.ok(Map.of("order", orderDto));
+            } else {
+                Integer userId = permissionService.getUserId();
+                if (userId == null) {
+                    return ResponseEntity.status(403).body(Map.of("message", "token invalid"));
+                }
+                OrderDto orderDto = orderService.getOrderDetail(id, userId);
+                if (!orderDto.getUser_id().equals(userId)) {
+                    return ResponseEntity.status(403).body(Map.of("message", "Permission denied"));
+                }
+                return ResponseEntity.ok(Map.of("order", orderDto));
+            }
+
         } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.badRequest().body(Map.of("message", "Order not found"));
         } catch (Exception e) {
