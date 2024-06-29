@@ -38,7 +38,10 @@ public class OrderEntity {
     @Column(name = "created_at")
     @JsonProperty(value = "created_at")
     private LocalDateTime createdAt;
-    private LocalDateTime updated_at;
+
+    @Column(name = "updated_at")
+    @JsonProperty(value = "updated_at")
+    private LocalDateTime updatedAt;
 
     private String status;
 }

@@ -1,5 +1,7 @@
 package vn.id.vuductrieu.tlcn_be.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,7 +33,11 @@ public class OrderItemEntity {
 
     private Integer variant_id;
 
-    private LocalDate created_at;
+    @Column(name = "created_at")
+    @JsonProperty(value = "created_at")
+    private LocalDate createdAt;
 
-    private LocalDate updated_at;
+    @Column(name = "updated_at")
+    @JsonProperty(value = "updated_at")
+    private LocalDate updatedAt;
 }

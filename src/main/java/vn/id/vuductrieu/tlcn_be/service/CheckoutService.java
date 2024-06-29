@@ -82,6 +82,8 @@ public class CheckoutService {
             orderItem.setOrder_id(order.getId());
             orderItem.setProduct_id(cart.getProduct_id());
             orderItem.setVariant_id(cart.getVariant_id());
+            orderItem.setCreatedAt(LocalDate.now());
+            orderItem.setUpdatedAt(LocalDate.now());
             orderItemRepository.save(orderItem);
         }
 
@@ -171,7 +173,7 @@ public class CheckoutService {
                 () -> new IllegalArgumentException("Order not found")
         );
         orderEntity.setStatus(request.get("status"));
-        orderEntity.setUpdated_at(LocalDateTime.now());
+        orderEntity.setUpdatedAt(LocalDateTime.now());
         orderRepository.save(orderEntity);
     }
 }
