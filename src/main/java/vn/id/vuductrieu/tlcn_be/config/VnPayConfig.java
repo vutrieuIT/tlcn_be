@@ -1,7 +1,7 @@
-package vn.id.vuductrieu.tlcn_be;
 
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.stereotype.Component;
+package vn.id.vuductrieu.tlcn_be.config;
+
+import io.github.cdimascio.dotenv.Dotenv;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -9,15 +9,24 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
-@Component
-public class VNPayConfig {
+/**
+ *
+ * @author CTT VNPAY
+ */
+public class VnPayConfig {
+
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_Returnurl = "/vnpay-payment";
-    public static String vnp_TmnCode = "";
-    public static String vnp_HashSecret = "LBKBRQXZXEYAIAINDKMVJLBYOJEZITIL";
-    public static String vnp_apiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
+    public static String vnp_ReturnUrl = Dotenv.load().get("APP_HOST") + "/lazi-store/checkpayment";
+    public static String vnp_TmnCode = "9W9C1DDC";
+    public static String secretKey = "JS7LEGFLCE0CXWU8HU5ERGSJIDJ104Z1";
+    public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
 
     public static String md5(String message) {
         String digest = null;
@@ -73,7 +82,7 @@ public class VNPayConfig {
                 sb.append("&");
             }
         }
-        return hmacSHA512(vnp_HashSecret,sb.toString());
+        return hmacSHA512(secretKey,sb.toString());
     }
 
     public static String hmacSHA512(final String key, final String data) {
@@ -99,18 +108,18 @@ public class VNPayConfig {
         }
     }
 
-    public static String getIpAddress(HttpServletRequest request) {
-        String ipAdress;
-        try {
-            ipAdress = request.getHeader("X-FORWARDED-FOR");
-            if (ipAdress == null) {
-                ipAdress = request.getLocalAddr();
-            }
-        } catch (Exception e) {
-            ipAdress = "Invalid IP:" + e.getMessage();
-        }
-        return ipAdress;
-    }
+//    public static String getIpAddress(HttpServletRequest request) {
+//        String ipAdress;
+//        try {
+//            ipAdress = request.getHeader("X-FORWARDED-FOR");
+//            if (ipAdress == null) {
+//                ipAdress = request.getRemoteAddr();
+//            }
+//        } catch (Exception e) {
+//            ipAdress = "Invalid IP:" + e.getMessage();
+//        }
+//        return ipAdress;
+//    }
 
     public static String getRandomNumber(int len) {
         Random rnd = new Random();

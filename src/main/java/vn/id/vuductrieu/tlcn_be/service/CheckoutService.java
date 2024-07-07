@@ -5,8 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.id.vuductrieu.tlcn_be.VNPayConfig;
-import vn.id.vuductrieu.tlcn_be.config.Config;
+import vn.id.vuductrieu.tlcn_be.config.VnPayConfig;
 import vn.id.vuductrieu.tlcn_be.dto.CheckoutDto;
 import vn.id.vuductrieu.tlcn_be.entity.CartEntity;
 import vn.id.vuductrieu.tlcn_be.entity.OrderEntity;
@@ -36,8 +35,6 @@ import java.util.TimeZone;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CheckoutService {
 
-    private final UserRepository userRepository;
-
     private final CheckoutRepository checkoutRepository;
 
     private final OrderRepository orderRepository;
@@ -49,8 +46,6 @@ public class CheckoutService {
     private final HttpServletRequest request;
 
     private final HttpServletResponse response;
-
-    private final VNPayConfig vnpayConfig;
 
     public Map checkout(CheckoutDto checkoutDto) throws Exception {
         Integer userId = checkoutDto.getUser_id();
@@ -108,7 +103,7 @@ public class CheckoutService {
 
         String vnp_TxnRef = billCode;
 
-        String vnp_TmnCode = Config.vnp_TmnCode;
+        String vnp_TmnCode = VnPayConfig.vnp_TmnCode;
 
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", vnp_Version);
@@ -123,7 +118,7 @@ public class CheckoutService {
 
         vnp_Params.put("vnp_Locale", "vn");
 
-        vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
+        vnp_Params.put("vnp_ReturnUrl", VnPayConfig.vnp_ReturnUrl);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -162,9 +157,9 @@ public class CheckoutService {
             }
         }
         String queryUrl = query.toString();
-        String vnp_SecureHash = Config.hmacSHA512(Config.secretKey, hashData.toString());
+        String vnp_SecureHash = VnPayConfig.hmacSHA512(VnPayConfig.secretKey, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
-        String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;
+        String paymentUrl = VnPayConfig.vnp_PayUrl + "?" + queryUrl;
         return paymentUrl;
     }
 

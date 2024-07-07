@@ -1,4 +1,4 @@
-package vn.id.vuductrieu.tlcn_be;
+package vn.id.vuductrieu.tlcn_be.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
