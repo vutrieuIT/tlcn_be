@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vn.id.vuductrieu.tlcn_be.dto.OrderDetailDto;
 import vn.id.vuductrieu.tlcn_be.dto.OrderDto;
 import vn.id.vuductrieu.tlcn_be.service.OrderService;
 import vn.id.vuductrieu.tlcn_be.service.PermissionService;
@@ -69,18 +70,18 @@ public class OrderController {
     public ResponseEntity<?> getOrderDetail(@PathVariable Integer id){
         try {
             if (permissionService.isAdmin()) {
-                OrderDto orderDto = orderService.getOrderDetail(id, null);
-                return ResponseEntity.ok(Map.of("order", orderDto));
+                OrderDetailDto orderDetailDto = orderService.getOrderDetail(id, null);
+                return ResponseEntity.ok(Map.of("order", orderDetailDto));
             } else {
                 Integer userId = permissionService.getUserId();
                 if (userId == null) {
                     return ResponseEntity.status(403).body(Map.of("message", "token invalid"));
                 }
-                OrderDto orderDto = orderService.getOrderDetail(id, userId);
-                if (!orderDto.getUser_id().equals(userId)) {
+                OrderDetailDto orderDetailDto = orderService.getOrderDetail(id, userId);
+                if (!orderDetailDto.getUser_id().equals(userId)) {
                     return ResponseEntity.status(403).body(Map.of("message", "Permission denied"));
                 }
-                return ResponseEntity.ok(Map.of("order", orderDto));
+                return ResponseEntity.ok(Map.of("order", orderDetailDto));
             }
 
         } catch (EmptyResultDataAccessException e) {
