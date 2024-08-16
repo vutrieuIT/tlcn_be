@@ -50,18 +50,23 @@ public class CheckoutController {
 
     @GetMapping("/lazi-store/checkpayment")
     public ResponseEntity<?> checkPayment(HttpServletRequest request) {
-        String redirectUrl = "http://localhost:5173/lazi-store/checkpayment?vnp_ResponseCode=00";
+        String redirectUrl = "http://localhost:5173/lazi-store/checkpayment?vnp_ResponseCode=%s";
         try {
-            checkoutService.checkPayment(request.getParameterMap());
+            System.out.println("URL:" + request.getRequestURL());
+            checkoutService.checkPayment(request.getParameterMap(), request);
+
+            redirectUrl = redirectUrl.formatted("00");
 
             return ResponseEntity.status(HttpStatus.FOUND)
                     .header("Location", redirectUrl)
                     .build();
         } catch (IllegalArgumentException e) {
+            redirectUrl = redirectUrl.formatted("01");
             return ResponseEntity.status(HttpStatus.FOUND)
                     .header("Location", redirectUrl)
                     .build();
         } catch (Exception e) {
+            redirectUrl = redirectUrl.formatted("99");
             return ResponseEntity.status(HttpStatus.FOUND)
                     .header("Location", redirectUrl)
                     .build();

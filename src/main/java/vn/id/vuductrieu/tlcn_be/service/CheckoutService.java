@@ -25,6 +25,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -163,11 +164,35 @@ public class CheckoutService {
         return paymentUrl;
     }
 
-    public void checkPayment(Map<String, String[]> request) {
-        OrderEntity orderEntity = orderRepository.findById(Integer.valueOf(request.get("vnp_TxnRef")[0])).orElseThrow(
+    public void checkPayment(Map<String, String[]> mapParams, HttpServletRequest request) {
+        // checksum
+        Map fields = new HashMap();
+        for (Enumeration params = request.getParameterNames(); params.hasMoreElements(); ) {
+            String fieldName = (String) params.nextElement();
+            String fieldValue = request.getParameter(fieldName);
+            if ((fieldValue != null) && (fieldValue.length() > 0)) {
+                fields.put(fieldName, URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
+            }
+        }
+
+        String vnp_SecureHash = request.getParameter("vnp_SecureHash");
+        if (fields.containsKey("vnp_SecureHashType")) {
+            fields.remove("vnp_SecureHashType");
+        }
+        if (fields.containsKey("vnp_SecureHash")) {
+            fields.remove("vnp_SecureHash");
+        }
+        String signValue = VnPayConfig.hashAllFields(fields);
+
+        if (!signValue.equals(vnp_SecureHash)) {
+            throw new IllegalArgumentException("Invalid signature");
+        }
+
+
+        OrderEntity orderEntity = orderRepository.findById(Integer.valueOf(mapParams.get("vnp_TxnRef")[0])).orElseThrow(
                 () -> new IllegalArgumentException("Order not found")
         );
-        orderEntity.setStatus(request.get("vnp_TransactionStatus")[0]);
+        orderEntity.setStatus(mapParams.get("vnp_TransactionStatus")[0]);
         orderEntity.setUpdatedAt(LocalDateTime.now());
         orderRepository.save(orderEntity);
     }
