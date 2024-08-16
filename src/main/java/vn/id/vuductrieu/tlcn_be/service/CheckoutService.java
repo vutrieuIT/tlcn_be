@@ -131,7 +131,7 @@ public class CheckoutService {
 
         String userIp = request.getRemoteAddr();
 
-        vnp_Params.put("vnp_IpAddr", "http://" + userIp + "/lazi-store/checkpayment");
+        vnp_Params.put("vnp_IpAddr", userIp);
 
         List fieldNames = new ArrayList(vnp_Params.keySet());
         Collections.sort(fieldNames);
@@ -163,12 +163,21 @@ public class CheckoutService {
         return paymentUrl;
     }
 
-    public void checkPayment(Map<String, String> request) {
-        OrderEntity orderEntity = orderRepository.findById(Integer.valueOf(request.get("orderId"))).orElseThrow(
+    public void checkPayment(Map<String, String[]> request) {
+        OrderEntity orderEntity = orderRepository.findById(Integer.valueOf(request.get("vnp_TxnRef")[0])).orElseThrow(
                 () -> new IllegalArgumentException("Order not found")
         );
-        orderEntity.setStatus(request.get("status"));
+        orderEntity.setStatus(request.get("vnp_TransactionStatus")[0]);
         orderEntity.setUpdatedAt(LocalDateTime.now());
         orderRepository.save(orderEntity);
+    }
+
+    public void verifyPayment(Map<String, String> request) {
+        String vnp_Version = "2.1.0";
+        String vnp_Command = "querydr";
+        Map<String, String> vnp_Params = new HashMap<>();
+        vnp_Params.put("vnp_Version", vnp_Version);
+        vnp_Params.put("vnp_Command", vnp_Command);
+
     }
 }
