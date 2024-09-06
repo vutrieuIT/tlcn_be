@@ -21,7 +21,7 @@ public class RecommendController {
     private final RecommendService recommendService;
 
     @GetMapping()
-    public ResponseEntity<List<ProductEntity>> recommend(@RequestParam String productId) {
+    public ResponseEntity<List<ProductEntity>> recommend(@RequestParam(required = false) String productId) {
         return ResponseEntity.ok().body(recommendService.getRecommend(productId));
     }
 }

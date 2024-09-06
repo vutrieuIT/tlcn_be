@@ -40,7 +40,7 @@ public class RecommendService {
         } catch (Exception ignored) {
         }
 
-        if (!recommend.isEmpty()) {
+        if (recommend != null && !recommend.isEmpty()) {
             return productService.getProductsByIds(recommend);
         }
 
