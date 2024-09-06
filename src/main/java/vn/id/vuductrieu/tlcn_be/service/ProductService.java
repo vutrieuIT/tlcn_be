@@ -101,4 +101,8 @@ public class ProductService {
                 .orElseThrow(() -> new EmptyResultDataAccessException("Variation not found", 1));
         productVariationRepository.delete(variation);
     }
+
+    public List<ProductEntity> getProductsByIds(List<Integer> recommend) {
+        return productRepository.findAllById(recommend);
+    }
 }

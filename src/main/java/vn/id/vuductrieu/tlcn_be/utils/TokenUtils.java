@@ -27,6 +27,7 @@ public class TokenUtils {
         return Jwts.builder()
                 .setSubject(userEntity.getEmail())
                 .claim("role", userEntity.getRole())
+                .claim("id", userEntity.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, getSigningKey())
