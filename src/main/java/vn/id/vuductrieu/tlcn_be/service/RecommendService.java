@@ -3,7 +3,6 @@ package vn.id.vuductrieu.tlcn_be.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.reactive.function.client.WebClientCustomizer;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,12 +21,11 @@ public class RecommendService {
 
     private final ProductService productService;
 
-    public List<ProductEntity> getRecommend(String productId) {
+    public List<ProductEntity> getRecommend(String userId, String productId) {
         WebClient webClient = WebClient.builder()
                 .baseUrl(RECOMMEND_URL)
                 .build();
 
-        Integer userId = permissionService.getUserId();
         String uri = userId == null ? "/api/v2/recommend_product/" + productId : "/api/v2/recommend/" + userId;
         List<Integer> recommend = null;
         try {
