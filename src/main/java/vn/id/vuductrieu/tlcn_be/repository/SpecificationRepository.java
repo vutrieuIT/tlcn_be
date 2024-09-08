@@ -6,4 +6,5 @@ import vn.id.vuductrieu.tlcn_be.entity.SpecificationEntity;
 
 @Repository
 public interface SpecificationRepository extends JpaRepository<SpecificationEntity, Integer> {
+    void deleteByCellphoneId(Integer id);
 }

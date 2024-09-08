@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import vn.id.vuductrieu.tlcn_be.dto.ProductDto;
+import vn.id.vuductrieu.tlcn_be.dto.SpecificationDto;
 import vn.id.vuductrieu.tlcn_be.entity.ProductEntity;
 import vn.id.vuductrieu.tlcn_be.entity.ProductVariationEntity;
 import vn.id.vuductrieu.tlcn_be.service.CloudaryService;
 import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 import vn.id.vuductrieu.tlcn_be.service.ProductService;
+import vn.id.vuductrieu.tlcn_be.service.SpecificationService;
 
 import java.util.List;
 
@@ -29,6 +31,8 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+
+    private final SpecificationService specificationService;
 
     private final PermissionService permissionService;
 
@@ -152,6 +156,57 @@ public class ProductController {
             return ResponseEntity.ok().body("Delete product successfully");
         } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/san-pham/specification/{id}")
+    public ResponseEntity<?> getSpecificationByCellphoneId(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok().body(specificationService.getSpecificationByProductId(id));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/san-pham/specification")
+    public ResponseEntity<?> createSpecification(@RequestBody(required = false) SpecificationDto specificationDto) {
+        try {
+            if (!permissionService.isAdmin()) {
+                return ResponseEntity.status(403).body("Permission denied");
+            }
+            specificationService.createSpecification(specificationDto);
+            return ResponseEntity.ok().body("Create specification successfully");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/san-pham/specification/{id}")
+    public ResponseEntity<?> updateSpecification(@PathVariable Integer id, @RequestBody SpecificationDto specificationDto) {
+        try {
+            if (!permissionService.isAdmin()) {
+                return ResponseEntity.status(403).body("Permission denied");
+            }
+            specificationDto.setCellphoneId(id);
+            specificationService.updateSpecification(specificationDto);
+            return ResponseEntity.ok().body("Update specification successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/san-pham/specification/{id}")
+    public ResponseEntity<?> deleteSpecificationByCellphoneId(@PathVariable Integer id) {
+        try {
+            if (!permissionService.isAdmin()) {
+                return ResponseEntity.status(403).body("Permission denied");
+            }
+            specificationService.deleteByProductId(id);
+            return ResponseEntity.ok().body("Delete specification successfully");
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
