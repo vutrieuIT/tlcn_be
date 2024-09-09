@@ -24,6 +24,7 @@ import vn.id.vuductrieu.tlcn_be.service.ProductService;
 import vn.id.vuductrieu.tlcn_be.service.SpecificationService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -74,8 +75,10 @@ public class ProductController {
             if (!permissionService.isAdmin()) {
                 return ResponseEntity.status(403).body("Permission denied");
             }
-            productService.createProduct(productDto);
-            return ResponseEntity.ok().body("Create product successfully");
+            Integer id = productService.createProduct(productDto);
+            return ResponseEntity.ok().body(
+                    Map.of("message", "Create product successfully", "id", id, "status", "success")
+            );
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body(e.getMessage());
@@ -170,27 +173,14 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/san-pham/specification")
-    public ResponseEntity<?> createSpecification(@RequestBody(required = false) SpecificationDto specificationDto) {
-        try {
-            if (!permissionService.isAdmin()) {
-                return ResponseEntity.status(403).body("Permission denied");
-            }
-            specificationService.createSpecification(specificationDto);
-            return ResponseEntity.ok().body("Create specification successfully");
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
-    }
-
     @PutMapping("/san-pham/specification/{id}")
-    public ResponseEntity<?> updateSpecification(@PathVariable Integer id, @RequestBody SpecificationDto specificationDto) {
+    public ResponseEntity<?> upsertSpecification(@PathVariable Integer id, @RequestBody SpecificationDto specificationDto) {
         try {
             if (!permissionService.isAdmin()) {
                 return ResponseEntity.status(403).body("Permission denied");
             }
             specificationDto.setCellphoneId(id);
-            specificationService.updateSpecification(specificationDto);
+            specificationService.upsertSpecification(specificationDto);
             return ResponseEntity.ok().body("Update specification successfully");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

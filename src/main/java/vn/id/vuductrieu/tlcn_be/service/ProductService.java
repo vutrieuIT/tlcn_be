@@ -45,7 +45,7 @@ public class ProductService {
         return productRepository.findById(id).orElse(null);
     }
 
-    public void createProduct(ProductDto productDto) {
+    public Integer createProduct(ProductDto productDto) {
         ProductEntity product = new ProductEntity();
         BeanUtils.copyProperties(productDto, product);
         CategoriesProductEntity category = categoryProductRepository.findById(productDto.getCategory_id())
@@ -56,10 +56,11 @@ public class ProductService {
         product.setSlug(productDto.getName().toLowerCase());
         product.setStatus("none");
         product.setCreated_at(LocalDateTime.now());
-        productRepository.save(product);
+        ProductEntity productEntity = productRepository.save(product);
+        return productEntity.getId();
     }
 
-    public void updateProduct(Integer id, ProductDto productDto) {
+    public Integer updateProduct(Integer id, ProductDto productDto) {
         ProductEntity product = productRepository.findById(id)
                 .orElseThrow(() -> new EmptyResultDataAccessException("Product not found", 1));
         BeanUtils.copyProperties(productDto, product);
@@ -67,7 +68,8 @@ public class ProductService {
                 .orElseThrow(() -> new EmptyResultDataAccessException("Category not found", 1));
         product.setCategory(category);
         product.setUpdated_at(LocalDateTime.now());
-        productRepository.save(product);
+        ProductEntity productEntity = productRepository.save(product);
+        return productEntity.getId();
     }
 
     public void deleteProduct(Integer id) {

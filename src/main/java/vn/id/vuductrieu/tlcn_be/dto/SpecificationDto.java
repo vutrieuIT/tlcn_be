@@ -25,29 +25,29 @@ public class SpecificationDto {
     private String operatingSystem;
 
     @Column(name = "internal_memory")
-    private String internalMemory;
+    private Integer internalMemory;
 
     @Column(name = "RAM")
-    private String RAM;
+    private Integer RAM;
 
     @Column(name = "performance")
-    private String performance;
+    private Integer performance;
 
     @Column(name = "main_camera")
-    private String mainCamera;
+    private Integer mainCamera;
 
     @Column(name = "selfie_camera")
-    private String selfieCamera;
+    private Integer selfieCamera;
 
     @Column(name = "battery_size")
-    private String batterySize;
+    private Integer batterySize;
 
     @Column(name = "screen_size")
-    private String screenSize;
+    private Integer screenSize;
 
     @Column(name = "weight")
-    private String weight;
+    private Integer weight;
 
     @Column(name = "price")
-    private String price;
+    private Integer price;
 }

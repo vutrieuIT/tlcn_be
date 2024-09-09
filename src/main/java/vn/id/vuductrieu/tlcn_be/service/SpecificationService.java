@@ -14,7 +14,6 @@ import java.util.Optional;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SpecificationService {
 
-
     private final SpecificationRepository specificationRepository;
 
     public SpecificationEntity getSpecificationByProductId(Integer id) {
@@ -25,20 +24,9 @@ public class SpecificationService {
         specificationRepository.deleteByCellphoneId(id);
     }
 
-    public void createSpecification(SpecificationDto specificationDto) {
-        SpecificationEntity specificationEntity = new SpecificationEntity();
-        BeanUtils.copyProperties(specificationDto, specificationEntity);
-        specificationRepository.save(specificationEntity);
-    }
-
-    public void updateSpecification(SpecificationDto specificationDto) {
-        Optional<SpecificationEntity> specificationEntity = specificationRepository.findById(specificationDto.getCellphoneId());
-        specificationEntity.ifPresentOrElse(specification -> {
-            BeanUtils.copyProperties(specificationDto, specification);
-            specificationRepository.save(specification);
-        }, () -> {
-            throw new IllegalArgumentException("Specification not found");
-        });
-
+    public void upsertSpecification(SpecificationDto specificationDto) {
+        SpecificationEntity specification = new SpecificationEntity();
+        BeanUtils.copyProperties(specificationDto, specification);
+        specificationRepository.save(specification);
     }
 }
