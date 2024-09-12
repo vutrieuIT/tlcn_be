@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import vn.id.vuductrieu.tlcn_be.dto.ProductDto;
+import vn.id.vuductrieu.tlcn_be.dto.RatingDto;
 import vn.id.vuductrieu.tlcn_be.dto.SpecificationDto;
 import vn.id.vuductrieu.tlcn_be.entity.ProductEntity;
 import vn.id.vuductrieu.tlcn_be.entity.ProductVariationEntity;
@@ -197,6 +198,42 @@ public class ProductController {
             }
             specificationService.deleteByProductId(id);
             return ResponseEntity.ok().body("Delete specification successfully");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/san-pham/comment/{id}")
+    public ResponseEntity<?> getCommentByCellphoneId(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok().body(productService.getCommentByCellphoneId(id));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/san-pham/comment")
+    public ResponseEntity<?> createComment(@RequestBody RatingDto ratingDto) {
+        try {
+            productService.createComment(ratingDto);
+            return ResponseEntity.ok().body("Create comment successfully");
+        } catch (EmptyResultDataAccessException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/san-pham/comment/{userId}/{cellphoneId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Integer userId, @PathVariable Integer cellphoneId) {
+        try {
+            if (!permissionService.isAdmin()) {
+                return ResponseEntity.status(403).body("Permission denied");
+            }
+            productService.deleteComment(userId, cellphoneId);
+            return ResponseEntity.ok().body("Delete comment successfully");
+        } catch (EmptyResultDataAccessException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }

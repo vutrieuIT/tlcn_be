@@ -6,12 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import vn.id.vuductrieu.tlcn_be.dto.ProductDto;
+import vn.id.vuductrieu.tlcn_be.dto.RatingDto;
 import vn.id.vuductrieu.tlcn_be.entity.CategoriesProductEntity;
 import vn.id.vuductrieu.tlcn_be.entity.ProductEntity;
 import vn.id.vuductrieu.tlcn_be.entity.ProductVariationEntity;
+import vn.id.vuductrieu.tlcn_be.entity.RatingEntity;
 import vn.id.vuductrieu.tlcn_be.repository.CategoryProductRepository;
 import vn.id.vuductrieu.tlcn_be.repository.ProductRepository;
 import vn.id.vuductrieu.tlcn_be.repository.ProductVariationRepository;
+import vn.id.vuductrieu.tlcn_be.repository.RatingRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +28,10 @@ public class ProductService {
     private final CategoryProductRepository categoryProductRepository;
 
     private final ProductVariationRepository productVariationRepository;
+
+    private final PermissionService permissionService;
+    
+    private final RatingRepository ratingRepository;
 
     public List<ProductEntity> getAllProduct() {
         List<ProductEntity> products = productRepository.find();
@@ -106,5 +113,27 @@ public class ProductService {
 
     public List<ProductEntity> getProductsByIds(List<Integer> recommend) {
         return productRepository.findAllById(recommend);
+    }
+    
+    public void createComment(RatingDto ratingDto) {
+        RatingEntity rating = new RatingEntity();
+        BeanUtils.copyProperties(ratingDto, rating);
+        Integer userId = permissionService.getUserId();
+        if (userId == null) {
+            throw new EmptyResultDataAccessException("User not found", 1);
+        }
+        rating.setUserId(userId);
+        ratingRepository.save(rating);
+    }
+
+    public List<RatingEntity> getCommentByCellphoneId(Integer id) {
+        return ratingRepository.findByCellphoneId(id);
+    }
+
+    public void deleteComment(Integer userId, Integer cellphoneId) {
+        RatingEntity rating = new RatingEntity();
+        rating.setUserId(userId);
+        rating.setCellphoneId(cellphoneId);
+        ratingRepository.delete(rating);
     }
 }
