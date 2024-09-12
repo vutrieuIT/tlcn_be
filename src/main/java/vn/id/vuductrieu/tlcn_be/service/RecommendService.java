@@ -17,7 +17,11 @@ public class RecommendService {
     @Value("${myapp.url.recommend}")
     private String RECOMMEND_URL;
 
-    private final PermissionService permissionService;
+    @Value("${myapp.url.path-recommend-user}")
+    private String RECOMMEND_USER_URL;
+
+    @Value("${myapp.url.path-recommend-product}")
+    private String RECOMMEND_PRODUCT_URL;
 
     private final ProductService productService;
 
@@ -26,7 +30,7 @@ public class RecommendService {
                 .baseUrl(RECOMMEND_URL)
                 .build();
 
-        String uri = userId == null ? "/api/v2/recommend_product/" + productId : "/api/v2/recommend/" + userId;
+        String uri = userId == null ? RECOMMEND_PRODUCT_URL + productId : RECOMMEND_USER_URL + userId;
         List<Integer> recommend = null;
         try {
              recommend = webClient.get()

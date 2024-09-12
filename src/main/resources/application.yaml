@@ -46,4 +46,6 @@ myapp:
       expiration: 86400000 #3600000 # 1 hour
   url:
     recommend: ${APP_URL_RECOMMEND:http://localhost:5000}
+    path-recommend-user: /recommend/user/
+    path-recommend-product: /recommend/product/
 
