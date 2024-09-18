@@ -1,6 +1,7 @@
 package vn.id.vuductrieu.tlcn_be.repository;
 
 import org.hibernate.annotations.processing.HQL;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import vn.id.vuductrieu.tlcn_be.dto.ProductDto;
@@ -16,6 +17,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     List<ProductEntity> find();
 
     @Query("SELECT p FROM ProductEntity p")
-    List<ProductEntity> findPopularProduct(int limit);
+    List<ProductEntity> findPopularProduct(Pageable pageable);
 
 }

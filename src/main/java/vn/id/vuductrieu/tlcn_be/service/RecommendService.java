@@ -30,7 +30,7 @@ public class RecommendService {
                 .baseUrl(RECOMMEND_URL)
                 .build();
 
-        String uri = userId == null ? RECOMMEND_PRODUCT_URL + productId : RECOMMEND_USER_URL + userId;
+        String uri = userId == null ? RECOMMEND_USER_URL + userId : RECOMMEND_PRODUCT_URL + productId;
         List<Integer> recommend = null;
         try {
              recommend = webClient.get()
@@ -39,7 +39,8 @@ public class RecommendService {
                     .bodyToMono(new ParameterizedTypeReference<List<Integer>>() {
                     })
                     .block();
-        } catch (Exception ignored) {
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
         }
 
         if (recommend != null && !recommend.isEmpty()) {

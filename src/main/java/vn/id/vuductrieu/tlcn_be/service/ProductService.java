@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.id.vuductrieu.tlcn_be.dto.ProductDto;
 import vn.id.vuductrieu.tlcn_be.dto.RatingDto;
@@ -44,8 +45,8 @@ public class ProductService {
     }
 
     public List<ProductEntity> popularProduct(int limit) {
-        return productRepository.findPopularProduct(limit);
-
+        Pageable pageable = Pageable.ofSize(limit);
+        return productRepository.findPopularProduct(pageable);
     }
 
     public ProductEntity getProductById(Integer id) {
