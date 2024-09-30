@@ -23,6 +23,6 @@ ENV APP_KEYSTORE_PASS=123456
 EXPOSE 8001
 EXPOSE 8443
 COPY --from=build /app/target/*.jar app.jar
-#COPY .env .env // comment out when build in jenkins
+COPY .env .env
 COPY ./src/main/resources/keystore.p12 /app/keystore.p12
 CMD ["java", "-jar", "app.jar"]
