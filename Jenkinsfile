@@ -35,7 +35,8 @@ pipeline {
                     '''
                 }
             }
-        }        stage('Build Docker Image') {
+        }
+        stage('Build Docker Image') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'app_mail_user', passwordVariable: 'APP_MAIL_PASS', usernameVariable: 'APP_MAIL_USER'),
                                  string(credentialsId: 'app_keystore_pass', variable: 'APP_KEYSTORE_PASS')]) {
