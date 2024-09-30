@@ -44,12 +44,12 @@ pipeline {
             }
         }
     }
-     post {
-            success {
-                mail bcc: '', body: 'build backend done', cc: '', from: '', replyTo: '', subject: 'jenkins build', to: 'vutrieu2002@gmail.com'
-            }
-            failure {
-                mail bcc: '', body: 'build backend fail', cc: '', from: '', replyTo: '', subject: 'jenkins build', to: 'vutrieu2002@gmail.com'
-            }
-        }
+//     post {
+//         success {
+//             mail bcc: '', body: 'build backend done', cc: '', from: '', replyTo: '', subject: 'jenkins build', to: 'vutrieu2002@gmail.com'
+//         }
+//         failure {
+//             mail bcc: '', body: 'build backend fail', cc: '', from: '', replyTo: '', subject: 'jenkins build', to: 'vutrieu2002@gmail.com'
+//         }
+//     }
 }
