@@ -42,10 +42,7 @@ pipeline {
                                  string(credentialsId: 'app_keystore_pass', variable: 'APP_KEYSTORE_PASS')]) {
                     // Command to build Docker image
                     sh '''
-                    docker build --build-arg APP_MAIL_USER=$APP_MAIL_USER \
-                                 --build-arg APP_MAIL_PASS=$APP_MAIL_PASS \
-                                 --build-arg APP_KEYSTORE_PASS=$APP_KEYSTORE_PASS \
-                                 -t $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .
+                    docker build -t $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .
                     '''
                 }
                 withDockerRegistry(credentialsId: 'docker-hub', url: 'https://index.docker.io/v1/') {
