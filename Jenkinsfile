@@ -6,11 +6,14 @@ pipeline {
         APP_DB_PASSWORD = '12345'
         TZ = 'Asia/Ho_Chi_Minh'
         APP_KEYSTORE = '/app/keystore.p12'
+        DOCKER_REGISTRY = 'trieuvu'
+        IMAGE_NAME = 'tlcn_be'
+        IMAGE_TAG = 'new'
     }
     stages {
         stage('Clone') {
             steps {
-                git branch: 'protect/deploy', url: 'https://github.com/vutrieuIT/fe_client.git'
+                git branch: 'protect/deploy', url: 'https://github.com/vutrieuIT/tlcn_be.git'
             }
         }
         stage('Check Branch') {
@@ -32,8 +35,11 @@ pipeline {
                     docker build --build-arg APP_MAIL_USER=$APP_MAIL_USER \
                                  --build-arg APP_MAIL_PASS=$APP_MAIL_PASS \
                                  --build-arg APP_KEYSTORE_PASS=$APP_KEYSTORE_PASS \
-                                 -t myapp .
+                                 -t $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .
                     '''
+                }
+                withDockerRegistry(credentialsId: 'docker-hub', url: 'https://index.docker.io/v1/') {
+                    sh 'docker push $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG'
                 }
             }
         }
