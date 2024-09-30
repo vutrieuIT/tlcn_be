@@ -26,7 +26,16 @@ pipeline {
                 }
             }
         }
-        stage('Build Docker Image') {
+        stage('Prepare Environment') {
+            steps {
+                withCredentials([file(credentialsId: 'be-dot-env', variable: 'BE_ENV_FILE')]) {
+                    // Copy the .env file to the project root
+                    sh '''
+                    cp $BE_ENV_FILE ./.env
+                    '''
+                }
+            }
+        }        stage('Build Docker Image') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'app_mail_user', passwordVariable: 'APP_MAIL_PASS', usernameVariable: 'APP_MAIL_USER'),
                                  string(credentialsId: 'app_keystore_pass', variable: 'APP_KEYSTORE_PASS')]) {
