@@ -7,7 +7,7 @@ pipeline {
         TZ = 'Asia/Ho_Chi_Minh'
         APP_KEYSTORE = '/app/keystore.p12'
         DOCKER_REGISTRY = 'trieuvu'
-        IMAGE_NAME = 'tlcn_be'
+        IMAGE_NAME = 'be'
         IMAGE_TAG = 'new'
     }
     stages {
