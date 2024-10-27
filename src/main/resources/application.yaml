@@ -48,4 +48,7 @@ myapp:
     recommend: ${APP_URL_RECOMMEND:http://localhost:5000}
     path-recommend-user: /recommend/user/
     path-recommend-product: /recommend/product/
-
+ghn:
+  token: ${GHN_TOKEN:token}
+  shop-id: ${GHN_SHOP_ID:shop_id}
+  url: ${GHN_URL:https://dev-online-gateway.ghn.vn/shiip/public-api}
