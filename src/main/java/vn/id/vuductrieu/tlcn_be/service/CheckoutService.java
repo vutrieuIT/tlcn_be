@@ -188,13 +188,26 @@ public class CheckoutService {
             throw new IllegalArgumentException("Invalid signature");
         }
 
-
         OrderEntity orderEntity = orderRepository.findById(Integer.valueOf(mapParams.get("vnp_TxnRef")[0])).orElseThrow(
                 () -> new IllegalArgumentException("Order not found")
         );
-        orderEntity.setStatus(mapParams.get("vnp_TransactionStatus")[0]);
+        String vnp_ResponseCode = mapParams.get("vnp_ResponseCode")[0];
+        if (vnp_ResponseCode.equals("24")) {
+            orderEntity.setStatus("unpaid");
+            orderEntity.setUpdatedAt(LocalDateTime.now());
+            orderRepository.save(orderEntity);
+            throw new IllegalArgumentException("Payment failed");
+        }
+        if (vnp_ResponseCode.equals("00")) {
+            orderEntity.setStatus("paid");
+            orderEntity.setUpdatedAt(LocalDateTime.now());
+            orderRepository.save(orderEntity);
+            return;
+        }
+        orderEntity.setStatus("pending");
         orderEntity.setUpdatedAt(LocalDateTime.now());
         orderRepository.save(orderEntity);
+        throw new IllegalArgumentException("Payment failed");
     }
 
     public void verifyPayment(Map<String, String> request) {
