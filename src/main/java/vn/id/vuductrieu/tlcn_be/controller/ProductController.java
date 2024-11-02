@@ -19,7 +19,7 @@ import vn.id.vuductrieu.tlcn_be.dto.RatingDto;
 import vn.id.vuductrieu.tlcn_be.dto.SpecificationDto;
 import vn.id.vuductrieu.tlcn_be.entity.ProductEntity;
 import vn.id.vuductrieu.tlcn_be.entity.ProductVariationEntity;
-import vn.id.vuductrieu.tlcn_be.service.CloudaryService;
+import vn.id.vuductrieu.tlcn_be.service.ImageService;
 import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 import vn.id.vuductrieu.tlcn_be.service.ProductService;
 import vn.id.vuductrieu.tlcn_be.service.SpecificationService;
@@ -38,7 +38,7 @@ public class ProductController {
 
     private final PermissionService permissionService;
 
-    private final CloudaryService cloudaryService;
+    private final ImageService imageService;
 
     @GetMapping("/san-pham")
     public ResponseEntity<?> getAllProduct() {
@@ -121,7 +121,7 @@ public class ProductController {
                 return ResponseEntity.status(403).body("Permission denied");
             }
             if (file != null) {
-                productVariationEntity.setImage_url(cloudaryService.uploadImage(file, "variant"));
+                productVariationEntity.setImage_url(imageService.saveImage(file, "variant"));
             }
             productService.createVariationProduct(productVariationEntity);
             return ResponseEntity.ok().body("Create product successfully");
@@ -141,7 +141,7 @@ public class ProductController {
                 return ResponseEntity.status(403).body("Permission denied");
             }
             if (file != null) {
-                productVariationEntity.setImage_url(cloudaryService.uploadImage(file, "variant"));
+                productVariationEntity.setImage_url(imageService.saveImage(file, "variant"));
             }
             productService.updateVariationProduct(id, productVariationEntity);
             return ResponseEntity.ok().body("Update product successfully");
