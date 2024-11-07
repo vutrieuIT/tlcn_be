@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.id.vuductrieu.tlcn_be.dto.mongodb.ProductMongoDto;
 import vn.id.vuductrieu.tlcn_be.dto.mongodb.RatingMongoDto;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.ProductRepo;
+import vn.id.vuductrieu.tlcn_be.service.MongoService.BrandMongoService;
 import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 import vn.id.vuductrieu.tlcn_be.service.ProductMongoService;
 
@@ -23,7 +24,6 @@ import java.util.Map;
 @RequestMapping("/api/mongo")
 @RequiredArgsConstructor
 public class ProductMongoController {
-
 
     private final ProductMongoService productMongoService;
 
@@ -43,9 +43,9 @@ public class ProductMongoController {
     @RequestMapping(value = "/san-pham", method = {RequestMethod.POST, RequestMethod.PUT})
     public ResponseEntity saveProduct(@RequestBody ProductMongoDto productMongoDto) {
         try {
-            if (!permissionService.isAdmin()) {
-                return ResponseEntity.status(403).body("Permission denied");
-            }
+//            if (!permissionService.isAdmin()) {
+//                return ResponseEntity.status(403).body("Permission denied");
+//            }
             String id = productMongoService.saveProduct(productMongoDto);
             return ResponseEntity.ok().body(
                     Map.of("message", "Create product successfully", "id", id, "status", "success")
