@@ -89,7 +89,7 @@ public class CartMongoService {
         }
     }
 
-    public void deleteCart(ItemDocument itemDocument) {
+    public void deleteCart(List<ItemDocument> itemDocument) {
         // TODO permission service
         String userId = "672e19dc3207000062004d32";
 
@@ -98,19 +98,7 @@ public class CartMongoService {
         if (userCollection == null) {
             throw new IllegalArgumentException("User not found");
         } else {
-            if (itemDocument == null) {
-                userCollection.setCart(new ArrayList<>());
-            } else {
-                List<ItemDocument> cart = userCollection.getCart();
-                Optional<ItemDocument> existingItem = cart.stream()
-                    .filter(item
-                        -> Objects.equals(item.getProductId(), itemDocument.getProductId())
-                        && Objects.equals(item.getColor(), itemDocument.getColor())
-                        && Objects.equals(item.getInternalMemory(), itemDocument.getInternalMemory()))
-                    .findFirst();
-                existingItem.ifPresent(cart::remove);
-                userCollection.setCart(cart);
-            }
+            userCollection.setCart(itemDocument);
             userRepo.save(userCollection);
         }
     }

@@ -5,11 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.document.ItemDocument;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.CartMongoService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/mongo")
@@ -41,8 +44,8 @@ public class CartMongoController {
         }
     }
 
-    @DeleteMapping("/cart")
-    public ResponseEntity<?> deleteCart(@RequestBody ItemDocument itemDocument) {
+    @PutMapping("/cart")
+    public ResponseEntity<?> updateCart(@RequestBody List<ItemDocument> itemDocument) {
         try {
             cartMongoService.deleteCart(itemDocument);
             return ResponseEntity.ok("Deleted cart successfully");
