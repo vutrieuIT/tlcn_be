@@ -10,4 +10,7 @@ public interface ProductRepo extends MongoRepository<ProductCollection, String> 
 
     @Query(value = "{}", fields = "{'brandName': 1}")
     List<ProductCollection> findBrandOnly();
+
+    @Query(value = "{_id: {$in: ?0}}")
+    List<ProductCollection> findByIds(List<String> recommend);
 }

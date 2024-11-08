@@ -1,4 +1,4 @@
-package vn.id.vuductrieu.tlcn_be.service;
+package vn.id.vuductrieu.tlcn_be.service.MongoService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -12,6 +12,7 @@ import vn.id.vuductrieu.tlcn_be.entity.mongodb.ProductCollection;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.RatingCollection;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.ProductRepo;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.RatingRepo;
+import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 
 import java.util.List;
 
@@ -70,5 +71,14 @@ public class ProductMongoService {
 
     public List<RatingCollection> getCommentByCellphoneId(Integer id) {
         return ratingRepo.findByProductId(id);
+    }
+
+    public List<ProductCollection> getProductsByIds(List<String> recommend) {
+        return productRepo.findByIds(recommend);
+    }
+
+    public List<ProductCollection> popularProduct(int i) {
+        Pageable pageable = PageRequest.of(0, i);
+        return productRepo.findAll(pageable).getContent();
     }
 }
