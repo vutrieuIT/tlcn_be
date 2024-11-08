@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import vn.id.vuductrieu.tlcn_be.entity.UserEntity;
+import vn.id.vuductrieu.tlcn_be.entity.mongodb.UserCollection;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
@@ -32,6 +33,16 @@ public class TokenUtils {
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, getSigningKey())
                 .compact();
+    }
+
+    public String generateMongoToken(UserCollection userCollection) {
+        return Jwts.builder()
+            .setSubject(userCollection.getEmail())
+            .claim("id", userCollection.getId())
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+            .signWith(SignatureAlgorithm.HS512, getSigningKey())
+            .compact();
     }
 
     // Lấy thông tin từ JWT token
