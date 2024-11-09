@@ -43,6 +43,14 @@ server:
     keyAlias: tomcat
   http:
     port: 8001
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
 
 myapp:
   security:

@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.document.ItemDocument;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -23,6 +24,9 @@ public class OrderCollection {
     private String status;
     private String userId;
 
-
     private String discountId;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 }
