@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import vn.id.vuductrieu.tlcn_be.entity.UserEntity;
+import vn.id.vuductrieu.tlcn_be.entity.mongodb.EmployeeCollection;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.UserCollection;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -39,6 +40,17 @@ public class TokenUtils {
         return Jwts.builder()
             .setSubject(userCollection.getEmail())
             .claim("id", userCollection.getId())
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+            .signWith(SignatureAlgorithm.HS512, getSigningKey())
+            .compact();
+    }
+
+    public String generateMongoToken(EmployeeCollection employeeCollection) {
+        return Jwts.builder()
+            .setSubject(employeeCollection.getName())
+            .claim("id", employeeCollection.getId())
+            .claim("role", employeeCollection.getRole())
             .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
             .signWith(SignatureAlgorithm.HS512, getSigningKey())

@@ -38,7 +38,7 @@ public class UserMongoController {
                 "email", userCollection.getEmail(),
                 "name", userCollection.getName(),
                 "token", tokenUtils.generateMongoToken(userCollection));
-            return ResponseEntity.ok().body("Login successfully");
+            return ResponseEntity.ok().body(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
