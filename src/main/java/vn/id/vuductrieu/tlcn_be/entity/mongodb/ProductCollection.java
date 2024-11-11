@@ -35,7 +35,7 @@ public class ProductCollection {
 
     private Integer batterySize;
 
-    private Integer screenSize;
+    private Double screenSize;
 
     private Integer weight;
 

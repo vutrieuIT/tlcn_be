@@ -23,5 +23,5 @@ public class EmployeeCollection {
 
     private String password;
 
-    private String role;
+    private Integer role;
 }

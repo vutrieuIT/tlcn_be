@@ -65,7 +65,7 @@ public class ProductMongoController {
     }
 
     @GetMapping("/san-pham/{id}")
-    public ResponseEntity getProductById(String id) {
+    public ResponseEntity getProductById(@PathVariable String id) {
         try {
             return ResponseEntity.ok(productMongoService.getProductById(id));
         } catch (Exception e) {

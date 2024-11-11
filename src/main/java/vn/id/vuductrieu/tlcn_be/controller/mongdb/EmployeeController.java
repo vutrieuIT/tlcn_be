@@ -32,10 +32,11 @@ public class EmployeeController {
                 "name", employeeCollection.getName(),
                 "token", tokenUtils.generateMongoToken(employeeCollection)
             );
-            return ResponseEntity.ok().body(employeeCollection);
+            return ResponseEntity.ok().body(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
