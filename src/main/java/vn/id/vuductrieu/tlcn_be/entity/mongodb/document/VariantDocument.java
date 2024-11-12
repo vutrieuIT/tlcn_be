@@ -8,7 +8,5 @@ import java.util.List;
 public class VariantDocument {
     private String color;
 
-    private Integer quantity;
-
     private List<String> images;
 }

@@ -8,5 +8,12 @@ import java.util.List;
 public class SpecificationDocument {
     private Integer internalMemory;
     private Integer price;
-    private List<String> color;
+    private List<ColorVariant> colorVariant;
+
+
+    @Data
+    private class ColorVariant {
+        private String color;
+        private Integer quantity;
+    }
 }
