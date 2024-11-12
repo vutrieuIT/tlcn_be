@@ -12,7 +12,7 @@ public class SpecificationDocument {
 
 
     @Data
-    private class ColorVariant {
+    private static class ColorVariant {
         private String color;
         private Integer quantity;
     }
