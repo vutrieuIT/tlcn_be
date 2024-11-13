@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import vn.id.vuductrieu.tlcn_be.service.ImageService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/mongo/file")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -24,4 +26,14 @@ public class FileMongoController {
             return "server";
         }
     }
+
+    @PostMapping("/list")
+    public List<String> uploadImages(@RequestPart("files") List<MultipartFile> files){
+        try {
+            return imageService.saveImages(files, "test");
+        } catch (Exception e){
+            return null;
+        }
+    }
 }
+

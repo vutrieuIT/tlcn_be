@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -45,4 +46,7 @@ public class ImageService {
         return File.separator + image_path;
     }
 
+    public List<String> saveImages(List<MultipartFile> files, String folder) {
+        return files.stream().map(file -> saveImage(file, folder)).toList();
+    }
 }
