@@ -26,6 +26,10 @@ public class OrderCollection {
 
     private String discountId;
 
+    private String paymentStatus;
+
+    private String paymentType;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
