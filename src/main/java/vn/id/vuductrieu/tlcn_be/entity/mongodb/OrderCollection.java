@@ -30,6 +30,8 @@ public class OrderCollection {
 
     private String paymentType;
 
+    private String shippingOrder;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

@@ -42,9 +42,9 @@ public class OrderMongoController {
     @GetMapping("/order")
     public ResponseEntity<?> getAllOrder(){
         try {
-            if (!permissionService.isAdmin()) {
-                return ResponseEntity.status(403).body(Map.of("message", "Permission denied"));
-            }
+//            if (!permissionService.isAdmin()) {
+//                return ResponseEntity.status(403).body(Map.of("message", "Permission denied"));
+//            }
             List<OrderCollection> orderCollections = orderMongoService.getAllOrder();
             return ResponseEntity.ok(Map.of("orders", orderCollections));
         } catch (Exception e) {
