@@ -122,6 +122,7 @@ public class GhnMongoService {
             JsonNode bodyResponse = (JsonNode) ResponseEntity.getBody();
             if (ResponseEntity.getStatusCode().is2xxSuccessful()) {
                 order.setShippingOrderStatus("Đã hủy");
+                order.setStatus("Xác nhận");
                 orderRepo.save(order);
             } else {
                 throw new IllegalArgumentException(bodyResponse.get("data").get("message").asText());
