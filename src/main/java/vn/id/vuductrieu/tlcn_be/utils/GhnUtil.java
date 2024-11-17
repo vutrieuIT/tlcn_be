@@ -75,5 +75,9 @@ public class GhnUtil {
         public static final String WARD = "/master-data/ward";
         public static final String SHOP = "/shop/get";
         public static final String ORDER = "/v2/shipping-order/create";
+        public static final String CANCEL_ORDER = "/v2/switch-status/cancel";
+
+        public static final String GET_AVAILABLE_SERVICES = "/v2/shipping-order/available-services";
+        public static final String GET_SHIPPING_FEE = "/v2/shipping-order/fee";
     }
 }

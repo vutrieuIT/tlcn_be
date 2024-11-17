@@ -172,4 +172,10 @@ public class UserMongoService {
         user.setStatus(userCollection.getStatus());
         userRepo.save(user);
     }
+
+    public UserCollection getUserInfo(String id) {
+        return userRepo.findByIdExceptCartAndPassAndCode(id).orElseThrow(
+            () -> new IllegalArgumentException("user not found")
+        );
+    }
 }

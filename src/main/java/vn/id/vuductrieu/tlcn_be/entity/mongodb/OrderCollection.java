@@ -17,6 +17,8 @@ public class OrderCollection {
 
     private Integer totalBill;
 
+    private Integer totalWeight;
+
     private Integer quantity;
 
     private List<ItemDocument> items;
@@ -30,7 +32,15 @@ public class OrderCollection {
 
     private String paymentType;
 
-    private String shippingOrder;
+    private String shippingOrderId;
+
+    private String shippingOrderStatus;
+
+    private String toAddress;
+
+    private Integer[] addressCode;
+
+    private String note;
 
     private LocalDateTime createdAt;
 

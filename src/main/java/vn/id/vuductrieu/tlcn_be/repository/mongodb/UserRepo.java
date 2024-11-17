@@ -16,4 +16,7 @@ public interface UserRepo extends MongoRepository<UserCollection, String> {
 
     @Query(value = "{}", fields = "{'cart': 0, 'password': 0, 'resetCode': 0}")
     List<UserCollection> findAllExceptCartAndPassAndCode();
+
+    @Query(value = "{'id': ?0}", fields = "{'cart': 0, 'password': 0, 'resetCode': 0}")
+    Optional<UserCollection> findByIdExceptCartAndPassAndCode(String id);
 }

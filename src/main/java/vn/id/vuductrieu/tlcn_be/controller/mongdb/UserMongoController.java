@@ -3,6 +3,7 @@ package vn.id.vuductrieu.tlcn_be.controller.mongdb;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -141,6 +142,21 @@ public class UserMongoController {
             }
             userMongoService.updateStatus(userCollection);
             return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/user-info/{id}")
+    public ResponseEntity<?> getUserInfo(@PathVariable String id) {
+        try {
+            if (!permissionService.isAdmin() && !permissionService.getUserId().equals(id)){
+                return ResponseEntity.status(403).body("you need admin role");
+            }
+            UserCollection userCollection = userMongoService.getUserInfo(id);
+            return ResponseEntity.ok().body(userCollection);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {

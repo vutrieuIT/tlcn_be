@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vn.id.vuductrieu.tlcn_be.dto.mongodb.AdminOrderDto;
+import vn.id.vuductrieu.tlcn_be.entity.mongodb.OrderCollection;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.GhnMongoService;
 import vn.id.vuductrieu.tlcn_be.utils.GhnUtil;
 
@@ -36,10 +38,40 @@ public class GhnMongoController {
     }
 
     @PostMapping("/create-ship-order")
-    public ResponseEntity createShipOrder(@RequestBody String body) {
+    public ResponseEntity createShipOrder(@RequestBody AdminOrderDto body) {
         try {
+            // TODO: admin permission
             ghnMongoService.createShipOrder(body);
             return ResponseEntity.ok("Create order successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/cancel-ship-order/{orderId}")
+    public ResponseEntity cancelShipOrder(@PathVariable String orderId) {
+        try {
+            // TODO: admin permission
+            ghnMongoService.cancelShipOrder(orderId);
+            return ResponseEntity.ok("Cancel order successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/available-services/{orderId}")
+    public ResponseEntity getAvailableServices(@PathVariable String orderId){
+        try {
+            return ResponseEntity.ok(ghnMongoService.getAvailableServices(orderId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/shipping-fee/{orderId}/{serviceTypeId}")
+    public ResponseEntity getShippingFee(@PathVariable String orderId, @PathVariable String serviceTypeId){
+        try {
+            return ResponseEntity.ok(ghnMongoService.getShippingFee(orderId, serviceTypeId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

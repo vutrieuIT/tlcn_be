@@ -39,6 +39,12 @@ public class ProductCollection {
 
     private Integer weight;
 
+    private Integer height;
+
+    private Integer width;
+
+    private Integer length;
+
     private List<SpecificationDocument> specifications;
 
     private List<VariantDocument> variants;
