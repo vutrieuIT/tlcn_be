@@ -24,4 +24,6 @@ public class EmployeeCollection {
     private String password;
 
     private Integer role;
+
+    private Integer status;
 }
