@@ -73,11 +73,11 @@ public class OrderController {
                 OrderDetailDto orderDetailDto = orderService.getOrderDetail(id, null);
                 return ResponseEntity.ok(Map.of("order", orderDetailDto));
             } else {
-                Integer userId = permissionService.getUserId();
+                String userId = permissionService.getUserId();
                 if (userId == null) {
                     return ResponseEntity.status(403).body(Map.of("message", "token invalid"));
                 }
-                OrderDetailDto orderDetailDto = orderService.getOrderDetail(id, userId);
+                OrderDetailDto orderDetailDto = orderService.getOrderDetail(id, Integer.parseInt(userId));
                 if (!orderDetailDto.getUser_id().equals(userId)) {
                     return ResponseEntity.status(403).body(Map.of("message", "Permission denied"));
                 }

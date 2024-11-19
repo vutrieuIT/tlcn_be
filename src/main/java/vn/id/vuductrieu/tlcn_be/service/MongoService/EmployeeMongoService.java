@@ -91,4 +91,18 @@ public class EmployeeMongoService {
             throw new IllegalArgumentException(e.getMessage());
         }
     }
+
+    public EmployeeCollection getDetail(String id) {
+        try {
+            EmployeeCollection employeeCollection = employeeRepo.findById(id).orElse(null);
+            if (employeeCollection == null) {
+                throw new IllegalArgumentException("Không tìm thấy nhân viên");
+            }
+            employeeCollection.setPassword(null);
+            return employeeCollection;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
 }

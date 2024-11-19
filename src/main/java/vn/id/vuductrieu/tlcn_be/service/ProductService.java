@@ -119,7 +119,7 @@ public class ProductService {
     public void createComment(RatingDto ratingDto) {
         RatingEntity rating = new RatingEntity();
         BeanUtils.copyProperties(ratingDto, rating);
-        Integer userId = permissionService.getUserId();
+        Integer userId = Integer.parseInt(permissionService.getUserId());
         if (userId == null) {
             throw new EmptyResultDataAccessException("User not found", 1);
         }

@@ -34,7 +34,7 @@ public class PermissionService {
         }
     }
 
-    public Integer getUserId() {
+    public String getUserId() {
         try {
             String token = request.getHeader("Authorization");
             if (token == null || !token.startsWith("Bearer ")) {
@@ -45,7 +45,7 @@ public class PermissionService {
                 return null;
             }
 
-            return tokenUtils.getClaimsFromToken(token.substring(7)).get("id", Integer.class);
+            return tokenUtils.getClaimsFromToken(token.substring(7)).get("id", String.class);
         } catch (Exception e) {
             return null;
         }
