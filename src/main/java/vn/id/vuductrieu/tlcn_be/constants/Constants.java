@@ -26,4 +26,25 @@ public class Constants {
             return value;
         }
     }
+
+    @RequiredArgsConstructor
+    public enum DiscountType {
+        PERCENTAGE("percentage"),
+        AMOUNT("amount");
+        private final String value;
+        public String getValue() {
+            return value;
+        }
+    }
+
+    @RequiredArgsConstructor
+    public enum DiscountStatus {
+        ACTIVE("active"),
+        INACTIVE("inactive"),
+        USED("used");
+        private final String value;
+        public String getValue() {
+            return value;
+        }
+    }
 }
