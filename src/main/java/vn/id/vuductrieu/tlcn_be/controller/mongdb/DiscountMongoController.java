@@ -18,7 +18,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/mongo/discount")
 @RequiredArgsConstructor
-public class DiscountController {
+public class DiscountMongoController {
 
     private final DiscountMongoService discountMongoService;
 
@@ -39,7 +39,7 @@ public class DiscountController {
     public ResponseEntity<?> create(@RequestBody DiscountCollection discount) {
         try {
             if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
-                return ResponseEntity.badRequest().body("Permission denied");
+                return ResponseEntity.badRequest().body("Bạn không có quyền thao tác");
             }
             discountMongoService.create(discount);
             return ResponseEntity.ok().body(Map.of("message", "Create success"));
@@ -55,7 +55,7 @@ public class DiscountController {
     public ResponseEntity<?> update(@RequestBody DiscountCollection discount) {
         try {
             if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
-                return ResponseEntity.badRequest().body("Permission denied");
+                return ResponseEntity.badRequest().body("Bạn không có quyền thao tác");
             }
             discountMongoService.update(discount);
             return ResponseEntity.ok().body(Map.of("message", "Update success"));

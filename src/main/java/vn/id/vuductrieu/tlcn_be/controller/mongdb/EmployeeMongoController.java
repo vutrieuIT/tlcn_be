@@ -20,7 +20,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/mongo/employee")
 @RequiredArgsConstructor
-public class EmployeeController {
+public class EmployeeMongoController {
 
     private final EmployeeMongoService employeeMongoService;
 
@@ -67,7 +67,7 @@ public class EmployeeController {
                 return ResponseEntity.badRequest().body("Bạn phải là admin");
             }
             employeeMongoService.create(employee);
-            return ResponseEntity.ok().body("Create success");
+            return ResponseEntity.ok().body("Tạo nhân viên thành công");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -83,7 +83,7 @@ public class EmployeeController {
                 return ResponseEntity.badRequest().body("Bạn không có quyền thao tác");
             }
             employeeMongoService.update(employee);
-            return ResponseEntity.ok().body("Update success");
+            return ResponseEntity.ok().body("Cập nhật nhân viên thành công");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
