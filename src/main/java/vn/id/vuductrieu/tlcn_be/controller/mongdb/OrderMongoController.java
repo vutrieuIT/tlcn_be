@@ -44,7 +44,7 @@ public class OrderMongoController {
     public ResponseEntity<?> getAllOrder(){
         try {
             if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
-                return ResponseEntity.status(403).body(Map.of("message", "Permission denied"));
+                return ResponseEntity.status(403).body(Map.of("message", "Bạn không có quyền thao tác"));
             }
             List<OrderCollection> orderCollections = orderMongoService.getAllOrder();
             return ResponseEntity.ok(Map.of("orders", orderCollections));
@@ -57,7 +57,7 @@ public class OrderMongoController {
     public ResponseEntity<?> updateOrder(@RequestBody JsonNode order){
         try {
             if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
-                return ResponseEntity.status(403).body(Map.of("message", "Permission denied"));
+                return ResponseEntity.status(403).body(Map.of("message", "Bạn không có quyền thao tác"));
             }
             orderMongoService.updateOrder(order.get("id").asText(), order.get("status").asText());
             return ResponseEntity.ok(Map.of("message", "Update order successfully"));

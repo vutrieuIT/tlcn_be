@@ -45,10 +45,10 @@ public class GhnMongoController {
     public ResponseEntity createShipOrder(@RequestBody AdminOrderDto body) {
         try {
             if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
-                return ResponseEntity.badRequest().body("Permission denied");
+                return ResponseEntity.badRequest().body("Bạn không có quyền thao tác");
             }
             ghnMongoService.createShipOrder(body);
-            return ResponseEntity.ok("Create order successfully");
+            return ResponseEntity.ok("Tạo đơn hàng thành công");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -58,10 +58,10 @@ public class GhnMongoController {
     public ResponseEntity cancelShipOrder(@PathVariable String orderId) {
         try {
             if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
-                return ResponseEntity.badRequest().body("Permission denied");
+                return ResponseEntity.badRequest().body("Bạn không có quyền thao tác");
             }
             ghnMongoService.cancelShipOrder(orderId);
-            return ResponseEntity.ok("Cancel order successfully");
+            return ResponseEntity.ok("Hủy đơn hàng thành công");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

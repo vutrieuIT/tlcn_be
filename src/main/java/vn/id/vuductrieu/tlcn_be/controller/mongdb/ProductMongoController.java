@@ -44,7 +44,7 @@ public class ProductMongoController {
     public ResponseEntity saveProduct(@RequestBody ProductMongoDto productMongoDto) {
         try {
             if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
-                return ResponseEntity.status(403).body("Permission denied");
+                return ResponseEntity.status(403).body("Bạn không có quyền thao tác");
             }
             String id = productMongoService.saveProduct(productMongoDto);
             return ResponseEntity.ok().body(
@@ -78,10 +78,10 @@ public class ProductMongoController {
     public ResponseEntity<?> deleteProduct(@PathVariable String id) {
         try {
             if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
-                return ResponseEntity.status(403).body("Permission denied");
+                return ResponseEntity.status(403).body("Bạn không có quyền thao tác");
             }
             productMongoService.deleteProduct(id);
-            return ResponseEntity.ok().body("Delete product successfully");
+            return ResponseEntity.ok().body("Xóa sản phẩm thành công");
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
@@ -100,7 +100,7 @@ public class ProductMongoController {
     public ResponseEntity<?> createComment(@RequestBody RatingMongoDto ratingMongoDto) {
         try {
             productMongoService.createComment(ratingMongoDto);
-            return ResponseEntity.ok().body("Create comment successfully");
+            return ResponseEntity.ok().body("Thêm bình luận thành công");
         } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -111,11 +111,11 @@ public class ProductMongoController {
     @DeleteMapping("/san-pham/comment/{id}")
     public ResponseEntity<?> deleteComment(@PathVariable String id) {
         try {
-            if (!permissionService.isAdmin()) {
-                return ResponseEntity.status(403).body("Permission denied");
+            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+                return ResponseEntity.status(403).body("Bạn không có quyền thao tác");
             }
             productMongoService.deleteComment(id);
-            return ResponseEntity.ok().body("Delete comment successfully");
+            return ResponseEntity.ok().body("Xóa bình luận thành công");
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }

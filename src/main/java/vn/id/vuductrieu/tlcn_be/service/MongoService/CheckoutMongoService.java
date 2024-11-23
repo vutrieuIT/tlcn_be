@@ -154,18 +154,18 @@ public class CheckoutMongoService {
         OrderCollection orderCollection = orderRepo.findById(mapParams.get("vnp_TxnRef")[0]).orElse(null);
         String vnp_ResponseCode = mapParams.get("vnp_ResponseCode")[0];
         if (vnp_ResponseCode.equals("24")) {
-            orderCollection.setStatus("unpaid");
+            orderCollection.setStatus(Constants.PaymentStatus.UNPAID.getValue());
             orderCollection.setUpdatedAt(LocalDateTime.now());
             orderRepo.save(orderCollection);
             throw new IllegalArgumentException("Thanh toán thất bại");
         }
         if (vnp_ResponseCode.equals("00")) {
-            orderCollection.setStatus("paid");
+            orderCollection.setStatus(Constants.PaymentStatus.PAID.getValue());
             orderCollection.setUpdatedAt(LocalDateTime.now());
             orderRepo.save(orderCollection);
             return;
         }
-        orderCollection.setStatus("pending");
+        orderCollection.setStatus(Constants.PaymentStatus.UNPAID.getValue());
         orderCollection.setUpdatedAt(LocalDateTime.now());
         orderRepo.save(orderCollection);
         throw new IllegalArgumentException("Thanh toán thất bại");

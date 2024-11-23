@@ -51,7 +51,7 @@ public class EmployeeController {
     public ResponseEntity<?> getAll() {
         try {
             if (!permissionService.checkRole(Constants.Role.ADMIN.getValue())) {
-                return ResponseEntity.badRequest().body("Permission denied");
+                return ResponseEntity.badRequest().body("Bạn phải là admin");
             }
             return ResponseEntity.ok().body(employeeMongoService.getAll());
         } catch (Exception e) {
@@ -64,7 +64,7 @@ public class EmployeeController {
     public ResponseEntity<?> create(@RequestBody EmployeeCollection employee) {
         try {
             if (!permissionService.checkRole(Constants.Role.ADMIN.getValue())) {
-                return ResponseEntity.badRequest().body("Permission denied");
+                return ResponseEntity.badRequest().body("Bạn phải là admin");
             }
             employeeMongoService.create(employee);
             return ResponseEntity.ok().body("Create success");
@@ -80,7 +80,7 @@ public class EmployeeController {
     public ResponseEntity<?> update(@RequestBody EmployeeCollection employee) {
         try {
             if (!permissionService.checkRole(Constants.Role.ADMIN.getValue()) || !permissionService.getUserId().equals(employee.getId())) {
-                return ResponseEntity.badRequest().body("Permission denied");
+                return ResponseEntity.badRequest().body("Bạn không có quyền thao tác");
             }
             employeeMongoService.update(employee);
             return ResponseEntity.ok().body("Update success");

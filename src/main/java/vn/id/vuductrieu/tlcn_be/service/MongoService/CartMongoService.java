@@ -53,23 +53,23 @@ public class CartMongoService {
     private String validateCart(ItemDocument itemDocument) {
         List<String> errors = new ArrayList<>();
         if (itemDocument.getQuantity() <= 0) {
-            errors.add("Quantity must be greater than 0");
+            errors.add("Số lượng phải lớn hơn 0");
         }
 
         if (itemDocument.getPrice() <= 0) {
-            errors.add("Price must be greater than 0");
+            errors.add("giá phải lớn hơn 0");
         }
 
         if (itemDocument.getProductId() == null) {
-            errors.add("Product id must not be null");
+            errors.add("Mã sản phẩm không được để trống");
         }
 
         if (itemDocument.getColor() == null) {
-            errors.add("Color must not be null");
+            errors.add("Màu sắc không được để trống");
         }
 
         if (itemDocument.getInternalMemory() == null) {
-            errors.add("Internal memory must not be null");
+            errors.add("Bộ nhớ trong không được để trống");
         }
 
         return String.join(", ", errors);

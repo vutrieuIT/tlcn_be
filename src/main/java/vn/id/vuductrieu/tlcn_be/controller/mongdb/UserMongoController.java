@@ -123,8 +123,8 @@ public class UserMongoController {
     @GetMapping("/all-user")
     public ResponseEntity<?> getAllUser() {
         try {
-            if (!permissionService.isAdmin()) {
-                return ResponseEntity.status(403).body("you need admin role");
+            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+                return ResponseEntity.status(403).body("Bạn không có quyền");
             }
             List<UserCollection> userCollectionList = userMongoService.getAllUser();
             return ResponseEntity.ok().body(userCollectionList);
@@ -138,8 +138,8 @@ public class UserMongoController {
     @PostMapping("/user/status")
     public ResponseEntity<?> getAllUser(@RequestBody UserCollection userCollection) {
         try {
-            if (!permissionService.isAdmin()) {
-                return ResponseEntity.status(403).body("you need admin role");
+            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+                return ResponseEntity.status(403).body("Bạn không có quyền");
             }
             userMongoService.updateStatus(userCollection);
             return ResponseEntity.ok().build();
@@ -155,7 +155,7 @@ public class UserMongoController {
         try {
             if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())
                 && !permissionService.getUserId().equals(id)) {
-                return ResponseEntity.status(403).body("you need admin role");
+                return ResponseEntity.status(403).body("Bạn không có quyền");
             }
             UserCollection userCollection = userMongoService.getUserInfo(id);
             return ResponseEntity.ok().body(userCollection);

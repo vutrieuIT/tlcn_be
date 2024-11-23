@@ -61,4 +61,14 @@ public class Constants {
             return value;
         }
     }
+
+    @RequiredArgsConstructor
+    public enum PaymentStatus {
+        PAID("Đã thanh toán"),
+        UNPAID("Chưa thanh toán");
+        private final String value;
+        public String getValue() {
+            return value;
+        }
+    }
 }
