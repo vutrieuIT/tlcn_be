@@ -17,7 +17,9 @@ public class DiscountMongoService {
 
     private final PermissionService permissionService;
     public List<DiscountCollection> getAll() {
-        return discountRepo.findAllSortByCreatedAt();
+        List<DiscountCollection> discountCollections = discountRepo.findAll();
+        discountCollections.sort((discount1, discount2) -> sortByStatus(discount1, discount2));
+        return discountCollections;
     }
 
     public void create(DiscountCollection discount) {
@@ -42,5 +44,13 @@ public class DiscountMongoService {
         String employeeId = permissionService.getUserId();
         discount.setEmployeeId(employeeId);
         discountRepo.save(discount);
+    }
+
+    private int sortByStatus(DiscountCollection discount1, DiscountCollection discount2) {
+        Integer mapStaus1 = Constants.DiscountStatus.ACTIVE.getValue().equals(discount1.getStatus()) ? 3 :
+            Constants.DiscountStatus.INACTIVE.getValue().equals(discount1.getStatus()) ? 2 : 1;
+        Integer mapStaus2 = Constants.DiscountStatus.ACTIVE.getValue().equals(discount2.getStatus()) ? 3 :
+            Constants.DiscountStatus.INACTIVE.getValue().equals(discount2.getStatus()) ? 2 : 1;
+        return mapStaus2.compareTo(mapStaus1);
     }
 }
