@@ -6,7 +6,8 @@ public class Constants {
 
     @RequiredArgsConstructor
     public enum Role {
-        ADMIN(1),
+        ADMIN(2),
+        EMPLOYEE(1),
         USER(0);
         private final int value;
 

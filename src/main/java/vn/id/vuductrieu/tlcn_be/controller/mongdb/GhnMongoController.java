@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vn.id.vuductrieu.tlcn_be.constants.Constants;
 import vn.id.vuductrieu.tlcn_be.dto.mongodb.AdminOrderDto;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.OrderCollection;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.GhnMongoService;
+import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 import vn.id.vuductrieu.tlcn_be.utils.GhnUtil;
 
 @RestController
@@ -21,6 +23,8 @@ public class GhnMongoController {
     private final GhnUtil ghnUtil;
 
     private final GhnMongoService ghnMongoService;
+
+    private final PermissionService permissionService;
 
     @GetMapping("/province")
     public ResponseEntity getProvince() {
@@ -40,7 +44,9 @@ public class GhnMongoController {
     @PostMapping("/create-ship-order")
     public ResponseEntity createShipOrder(@RequestBody AdminOrderDto body) {
         try {
-            // TODO: admin permission
+            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+                return ResponseEntity.badRequest().body("Permission denied");
+            }
             ghnMongoService.createShipOrder(body);
             return ResponseEntity.ok("Create order successfully");
         } catch (Exception e) {
@@ -51,7 +57,9 @@ public class GhnMongoController {
     @PostMapping("/cancel-ship-order/{orderId}")
     public ResponseEntity cancelShipOrder(@PathVariable String orderId) {
         try {
-            // TODO: admin permission
+            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+                return ResponseEntity.badRequest().body("Permission denied");
+            }
             ghnMongoService.cancelShipOrder(orderId);
             return ResponseEntity.ok("Cancel order successfully");
         } catch (Exception e) {

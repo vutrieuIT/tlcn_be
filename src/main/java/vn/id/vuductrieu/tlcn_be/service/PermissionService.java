@@ -34,6 +34,29 @@ public class PermissionService {
         }
     }
 
+    public boolean checkRole(Integer ...roles) {
+        try {
+            String token = request.getHeader("Authorization");
+            if (token == null || !token.startsWith("Bearer ")) {
+                return false;
+            }
+
+            if (!tokenUtils.validateToken(token.substring(7))) {
+                return false;
+            }
+
+            Integer role = tokenUtils.getClaimsFromToken(token.substring(7)).get("role", Integer.class);
+            for (Integer r : roles) {
+                if (Objects.equals(role, r)) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public String getUserId() {
         try {
             String token = request.getHeader("Authorization");

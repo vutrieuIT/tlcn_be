@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vn.id.vuductrieu.tlcn_be.constants.Constants;
 import vn.id.vuductrieu.tlcn_be.dto.LoginDto;
 import vn.id.vuductrieu.tlcn_be.dto.UserDto;
 import vn.id.vuductrieu.tlcn_be.entity.UserEntity;
@@ -50,7 +51,7 @@ public class UserMongoController {
     @PostMapping("/login-google")
     public ResponseEntity<?> loginGoogle(@RequestBody(required = false) String clientToken) {
         try {
-           UserCollection userCollection = userMongoService.loginGoogle(clientToken);
+            UserCollection userCollection = userMongoService.loginGoogle(clientToken);
             Map<String, Object> response = Map.of(
                 "id", userCollection.getId(),
                 "email", userCollection.getEmail(),
@@ -122,7 +123,7 @@ public class UserMongoController {
     @GetMapping("/all-user")
     public ResponseEntity<?> getAllUser() {
         try {
-            if (!permissionService.isAdmin()){
+            if (!permissionService.isAdmin()) {
                 return ResponseEntity.status(403).body("you need admin role");
             }
             List<UserCollection> userCollectionList = userMongoService.getAllUser();
@@ -137,7 +138,7 @@ public class UserMongoController {
     @PostMapping("/user/status")
     public ResponseEntity<?> getAllUser(@RequestBody UserCollection userCollection) {
         try {
-            if (!permissionService.isAdmin()){
+            if (!permissionService.isAdmin()) {
                 return ResponseEntity.status(403).body("you need admin role");
             }
             userMongoService.updateStatus(userCollection);
@@ -152,7 +153,8 @@ public class UserMongoController {
     @GetMapping("/user-info/{id}")
     public ResponseEntity<?> getUserInfo(@PathVariable String id) {
         try {
-            if (!permissionService.isAdmin() && !permissionService.getUserId().equals(id)){
+            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())
+                && !permissionService.getUserId().equals(id)) {
                 return ResponseEntity.status(403).body("you need admin role");
             }
             UserCollection userCollection = userMongoService.getUserInfo(id);

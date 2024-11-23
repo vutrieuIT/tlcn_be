@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import vn.id.vuductrieu.tlcn_be.constants.Constants;
 import vn.id.vuductrieu.tlcn_be.dto.mongodb.ProductMongoDto;
 import vn.id.vuductrieu.tlcn_be.dto.mongodb.RatingMongoDto;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.ProductRepo;
@@ -42,9 +43,9 @@ public class ProductMongoController {
     @RequestMapping(value = "/san-pham", method = {RequestMethod.POST, RequestMethod.PUT})
     public ResponseEntity saveProduct(@RequestBody ProductMongoDto productMongoDto) {
         try {
-//            if (!permissionService.isAdmin()) {
-//                return ResponseEntity.status(403).body("Permission denied");
-//            }
+            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+                return ResponseEntity.status(403).body("Permission denied");
+            }
             String id = productMongoService.saveProduct(productMongoDto);
             return ResponseEntity.ok().body(
                     Map.of("message", "Create product successfully", "id", id, "status", "success")
@@ -76,7 +77,7 @@ public class ProductMongoController {
     @DeleteMapping("/san-pham/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable String id) {
         try {
-            if (!permissionService.isAdmin()) {
+            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
                 return ResponseEntity.status(403).body("Permission denied");
             }
             productMongoService.deleteProduct(id);

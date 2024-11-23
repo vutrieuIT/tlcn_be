@@ -27,8 +27,7 @@ public class CartMongoService {
             throw new IllegalArgumentException(errors);
         }
 
-        //        String userId = permissionService.getUserId().toString();
-        String userId = "672e19dc3207000062004d32";
+        String userId = permissionService.getUserId().toString();
 
         UserCollection userCollection = userRepo.findById(userId).orElse(null);
 
@@ -77,8 +76,7 @@ public class CartMongoService {
     }
 
     public List<ItemDocument> getCart() {
-        //        String userId = permissionService.getUserId().toString();
-        String userId = "672e19dc3207000062004d32";
+        String userId = permissionService.getUserId().toString();
 
         UserCollection userCollection = userRepo.findById(userId).orElse(null);
 
@@ -90,8 +88,7 @@ public class CartMongoService {
     }
 
     public void deleteCart(List<ItemDocument> itemDocument) {
-        // TODO permission service
-        String userId = "672e19dc3207000062004d32";
+        String userId = permissionService.getUserId().toString();
 
         UserCollection userCollection = userRepo.findById(userId).orElse(null);
 

@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vn.id.vuductrieu.tlcn_be.constants.Constants;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.DiscountCollection;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.DiscountMongoService;
+import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 
 import java.util.Map;
 
@@ -20,10 +22,12 @@ public class DiscountController {
 
     private final DiscountMongoService discountMongoService;
 
+    private final PermissionService permissionService;
+
     @GetMapping
     public ResponseEntity<?> getAll() {
         try {
-            // TODO admin permission
+
             return ResponseEntity.ok().body(discountMongoService.getAll());
         } catch (Exception e) {
             e.printStackTrace();
@@ -34,7 +38,9 @@ public class DiscountController {
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody DiscountCollection discount) {
         try {
-            // TODO admin permission
+            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+                return ResponseEntity.badRequest().body("Permission denied");
+            }
             discountMongoService.create(discount);
             return ResponseEntity.ok().body(Map.of("message", "Create success"));
         } catch (IllegalArgumentException e) {
@@ -48,7 +54,9 @@ public class DiscountController {
     @PutMapping("/update")
     public ResponseEntity<?> update(@RequestBody DiscountCollection discount) {
         try {
-            // TODO admin permission
+            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+                return ResponseEntity.badRequest().body("Permission denied");
+            }
             discountMongoService.update(discount);
             return ResponseEntity.ok().body(Map.of("message", "Update success"));
         } catch (IllegalArgumentException e) {

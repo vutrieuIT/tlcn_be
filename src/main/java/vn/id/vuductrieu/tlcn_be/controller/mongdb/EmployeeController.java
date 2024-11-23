@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vn.id.vuductrieu.tlcn_be.constants.Constants;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.EmployeeCollection;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.EmployeeMongoService;
 import vn.id.vuductrieu.tlcn_be.service.PermissionService;
@@ -26,7 +27,6 @@ public class EmployeeController {
     private final TokenUtils tokenUtils;
 
     private final PermissionService permissionService;
-
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody EmployeeCollection employee) {
@@ -50,7 +50,9 @@ public class EmployeeController {
     @GetMapping
     public ResponseEntity<?> getAll() {
         try {
-            // TODO admin permission
+            if (!permissionService.checkRole(Constants.Role.ADMIN.getValue())) {
+                return ResponseEntity.badRequest().body("Permission denied");
+            }
             return ResponseEntity.ok().body(employeeMongoService.getAll());
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,7 +63,9 @@ public class EmployeeController {
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody EmployeeCollection employee) {
         try {
-            // TODO admin permission
+            if (!permissionService.checkRole(Constants.Role.ADMIN.getValue())) {
+                return ResponseEntity.badRequest().body("Permission denied");
+            }
             employeeMongoService.create(employee);
             return ResponseEntity.ok().body("Create success");
         } catch (IllegalArgumentException e) {
@@ -75,7 +79,9 @@ public class EmployeeController {
     @PutMapping("/update")
     public ResponseEntity<?> update(@RequestBody EmployeeCollection employee) {
         try {
-            // TODO admin permission
+            if (!permissionService.checkRole(Constants.Role.ADMIN.getValue()) || !permissionService.getUserId().equals(employee.getId())) {
+                return ResponseEntity.badRequest().body("Permission denied");
+            }
             employeeMongoService.update(employee);
             return ResponseEntity.ok().body("Update success");
         } catch (IllegalArgumentException e) {
@@ -89,7 +95,7 @@ public class EmployeeController {
     @GetMapping("{id}")
     public ResponseEntity<?> getDetail(@PathVariable String id) {
         try {
-            String idToken = permissionService.getUserId().toString();
+            String idToken = permissionService.getUserId();
             if (!idToken.equals(id)) {
                 return ResponseEntity.badRequest().body("Không có quyền truy cập");
             }
