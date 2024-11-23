@@ -38,7 +38,7 @@ public class ProductMongoService {
     public ProductCollection getProductById(String id) {
         ProductCollection product = productRepo.findById(id).orElse(null);
         if (product == null) {
-            throw new RuntimeException("Product not found");
+            throw new RuntimeException("Không tìm thấy sản phẩm");
         }
         return product;
     }
@@ -59,7 +59,7 @@ public class ProductMongoService {
         BeanUtils.copyProperties(ratingMongoDto, rating);
         String userId = permissionService.getUserId().toString();
         if (userId == null) {
-            throw new EmptyResultDataAccessException("User not found", 1);
+            throw new EmptyResultDataAccessException("Không tìm thấy người dùng", 1);
         }
         rating.setUserId(userId);
         ratingRepo.save(rating);

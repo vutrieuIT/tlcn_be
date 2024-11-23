@@ -30,14 +30,14 @@ public class UserMongoService {
             throw new IllegalArgumentException(error);
         }
         UserCollection userCollection = userRepo.findByEmail(loginDto.email).orElseThrow(
-            () -> new IllegalArgumentException("Email not found")
+            () -> new IllegalArgumentException("Không tìm thấy email")
         );
 
         if (!BCrypt.checkpw(loginDto.password, userCollection.getPassword())) {
-            throw new IllegalArgumentException("Password is incorrect");
+            throw new IllegalArgumentException("Mật khẩu không đúng");
         }
         if (Objects.equals(userCollection.getStatus(), Constants.Status.INACTIVE.getValue())) {
-            throw new IllegalArgumentException("account in inactive");
+            throw new IllegalArgumentException("Tài khoản đã bị khóa");
         }
 
         return userCollection;
@@ -45,7 +45,7 @@ public class UserMongoService {
 
     public UserCollection loginGoogle(String clientToken) {
         if (!verifyTokenGoogle(clientToken)) {
-            throw new IllegalArgumentException("Token is invalid");
+            throw new IllegalArgumentException("Token Google không hợp lệ");
         }
         String[] split = clientToken.split("\\.");
         String payload = new String(Base64.getDecoder().decode(split[1]));
@@ -69,7 +69,7 @@ public class UserMongoService {
 
         userRepo.findByEmail(userDto.email).ifPresent(
             userCollection -> {
-                throw new IllegalArgumentException("Email is already taken");
+                throw new IllegalArgumentException("Email đã tồn tại");
             }
         );
 
@@ -96,10 +96,10 @@ public class UserMongoService {
     private String validateLoginDto(LoginDto loginDto) {
         StringBuilder error = new StringBuilder();
         if (loginDto.email == null || loginDto.email.isEmpty()) {
-            error.append("Email is required");
+            error.append("Email không được để trống");
         }
         if (loginDto.password == null || loginDto.password.isEmpty()) {
-            error.append("Password is required");
+            error.append("Mật khẩu không được để trống");
         }
         return String.join(", ", error);
     }
@@ -107,43 +107,43 @@ public class UserMongoService {
     private String validateUserDto(UserDto UserDto) {
         StringBuilder error = new StringBuilder();
         if (UserDto.name == null || UserDto.name.isEmpty()) {
-            error.append("Name is required");
+            error.append("Tên không được để trống");
         }
         if (UserDto.email == null || UserDto.email.isEmpty()) {
-            error.append("Email is required");
+            error.append("Email không được để trống");
         }
         if (UserDto.password == null || UserDto.password.isEmpty()) {
-            error.append("Password is required");
+            error.append("Mật khẩu không được để trống");
         }
         if (UserDto.password_confirmation == null || UserDto.password_confirmation.isEmpty()) {
-            error.append("Password confirmation is required");
+            error.append("Mật khẩu xác nhận không được để trống");
         }
         if (!Objects.equals(UserDto.password, UserDto.password_confirmation)) {
-            error.append("Password and password confirmation must be the same");
+            error.append("Mật khẩu và mật khẩu xác nhận phải giống nhau");
         }
         return String.join(", ", error);
     }
 
     public void forgotPassword(String email) {
         UserCollection userCollection = userRepo.findByEmail(email).orElseThrow(
-            () -> new IllegalArgumentException("Email not found")
+            () -> new IllegalArgumentException("Không tìm thấy email")
         );
         // random code 6 digits
         String code = String.valueOf((int) (Math.random() * 900000 + 100000));
         userCollection.setResetCode(code);
         userRepo.save(userCollection);
-        emailService.sendEmail(email, "Forgot password", "Your code is: " + code);
+        emailService.sendEmail(email, "Quên mật khẩu", "Mã đặt lại mật khẩu của bạn: " + code);
     }
 
     public void changePasswordForgot(UserDto verifyCodeDto) {
         UserCollection userCollection = userRepo.findByEmail(verifyCodeDto.email).orElseThrow(
-            () -> new IllegalArgumentException("Email not found")
+            () -> new IllegalArgumentException("không tìm thấy email")
         );
         if (!Objects.equals(userCollection.getResetCode(), verifyCodeDto.code)) {
-            throw new IllegalArgumentException("Code is incorrect");
+            throw new IllegalArgumentException("Mã xác nhận không đúng");
         }
         if (Objects.equals(verifyCodeDto.getPassword(), verifyCodeDto.getPassword_confirmation())) {
-            throw new IllegalArgumentException("Password and password confirmation must be the same");
+            throw new IllegalArgumentException("Mật khẩu và mật khẩu xác nhận phải giống nhau");
         }
         userCollection.setPassword(BCrypt.hashpw(verifyCodeDto.password, BCrypt.gensalt()));
         userCollection.setResetCode(null);
@@ -152,10 +152,10 @@ public class UserMongoService {
 
     public void changePassword(UserDto userDto) {
         UserCollection userCollection = userRepo.findById(userDto.user_id).orElseThrow(
-            () -> new IllegalArgumentException("user not found")
+            () -> new IllegalArgumentException("Không tìm thấy user")
         );
         if (!BCrypt.checkpw(userDto.password_old, userCollection.getPassword())) {
-            throw new IllegalArgumentException("Old password is incorrect");
+            throw new IllegalArgumentException("Mật khẩu cũ không đúng");
         }
         userCollection.setPassword(BCrypt.hashpw(userDto.password, BCrypt.gensalt()));
         userRepo.save(userCollection);
@@ -167,7 +167,7 @@ public class UserMongoService {
 
     public void updateStatus(UserCollection userCollection) {
         UserCollection user = userRepo.findById(userCollection.getId()).orElseThrow(
-            () -> new IllegalArgumentException("user not found")
+            () -> new IllegalArgumentException("Không tìm thấy user")
         );
         user.setStatus(userCollection.getStatus());
         userRepo.save(user);
@@ -175,7 +175,7 @@ public class UserMongoService {
 
     public UserCollection getUserInfo(String id) {
         return userRepo.findByIdExceptCartAndPassAndCode(id).orElseThrow(
-            () -> new IllegalArgumentException("user not found")
+            () -> new IllegalArgumentException("Không tìm thấy user")
         );
     }
 }

@@ -39,7 +39,7 @@ public class CheckoutMongoService {
         String userId = "672e19dc3207000062004d32";
         UserCollection userCollection = userRepo.findById(userId).orElse(null);
         if (userCollection == null) {
-            throw new IllegalArgumentException("User not found");
+            throw new IllegalArgumentException("Không tìm thấy người dùng");
         }
 
         List<ItemDocument> carts = userCollection.getCart();
@@ -146,26 +146,26 @@ public class CheckoutMongoService {
         String signValue = VnPayConfig.hashAllFields(fields);
 
         if (!signValue.equals(vnp_SecureHash)) {
-            throw new IllegalArgumentException("Invalid signature");
+            throw new IllegalArgumentException("checksum không đúng");
         }
 
         OrderCollection orderCollection = orderRepo.findById(mapParams.get("vnp_TxnRef")[0]).orElse(null);
         String vnp_ResponseCode = mapParams.get("vnp_ResponseCode")[0];
         if (vnp_ResponseCode.equals("24")) {
             orderCollection.setStatus("unpaid");
-//            orderCollection.setUpdatedAt(LocalDateTime.now());
+            orderCollection.setUpdatedAt(LocalDateTime.now());
             orderRepo.save(orderCollection);
-            throw new IllegalArgumentException("Payment failed");
+            throw new IllegalArgumentException("Thanh toán thất bại");
         }
         if (vnp_ResponseCode.equals("00")) {
             orderCollection.setStatus("paid");
-//            orderCollection.setUpdatedAt(LocalDateTime.now());
+            orderCollection.setUpdatedAt(LocalDateTime.now());
             orderRepo.save(orderCollection);
             return;
         }
         orderCollection.setStatus("pending");
-//        orderCollection.setUpdatedAt(LocalDateTime.now());
+        orderCollection.setUpdatedAt(LocalDateTime.now());
         orderRepo.save(orderCollection);
-        throw new IllegalArgumentException("Payment failed");
+        throw new IllegalArgumentException("Thanh toán thất bại");
     }
 }

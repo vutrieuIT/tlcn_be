@@ -40,12 +40,12 @@ public class GhnMongoService {
 
     public void createShipOrder(AdminOrderDto adminOrderDto) {
         OrderCollection order = orderRepo.findById(adminOrderDto.getOrderId()).orElseThrow(
-            () -> new IllegalArgumentException("Order not found")
+            () -> new IllegalArgumentException("Không tìm thấy đơn hàng")
         );
 
         String userId = order.getUserId();
         UserCollection user = userRepo.findById(userId).orElseThrow(
-            () -> new IllegalArgumentException("User not found")
+            () -> new IllegalArgumentException("Không tìm thấy người dùng")
         );
 
         String toAddress = order.getToAddress() == null || order.getToAddress().equals("") ? user.getAddress() : order.getToAddress();
@@ -81,7 +81,7 @@ public class GhnMongoService {
         for (ItemDocument item : order.getItems()) {
             GHNItemDto ghnItemDto = new GHNItemDto();
             ProductCollection product = productRepo.findById(item.getProductId()).orElseThrow(
-                () -> new IllegalArgumentException("Product not found")
+                () -> new IllegalArgumentException("Không tìm thấy sản phẩm")
             );
             ghnItemDto.setName(product.getName());
             ghnItemDto.setQuantity(item.getQuantity());
@@ -106,13 +106,13 @@ public class GhnMongoService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new IllegalArgumentException("Create order failed");
+            throw new IllegalArgumentException("Tạo đơn hàng thất bại");
         }
     }
 
     public void cancelShipOrder(String orderId) {
         OrderCollection order = orderRepo.findById(orderId).orElseThrow(
-            () -> new IllegalArgumentException("Order not found")
+            () -> new IllegalArgumentException("Không tìm thấy đơn hàng")
         );
 
         try {
@@ -128,13 +128,13 @@ public class GhnMongoService {
                 throw new IllegalArgumentException(bodyResponse.get("data").get("message").asText());
             }
         } catch (Exception e) {
-            throw new IllegalArgumentException("Cancel order failed");
+            throw new IllegalArgumentException("Hủy đơn hàng thất bại");
         }
     }
 
     public Object getAvailableServices(String orderId) {
         OrderCollection order = orderRepo.findById(orderId).orElseThrow(
-            () -> new IllegalArgumentException("Order not found")
+            () -> new IllegalArgumentException("Không tìm thấy đơn hàng")
         );
 
         try {
@@ -158,7 +158,7 @@ public class GhnMongoService {
 
     public Integer getShippingFee(String orderId, String serviceTypeId) {
         OrderCollection order = orderRepo.findById(orderId).orElseThrow(
-            () -> new IllegalArgumentException("Order not found")
+            () -> new IllegalArgumentException("Không tìm thấy đơn hàng")
         );
 
         try {
@@ -168,7 +168,7 @@ public class GhnMongoService {
                 for (ItemDocument item : order.getItems()) {
                     GHNItemDto ghnItemDto = new GHNItemDto();
                     ProductCollection product = productRepo.findById(item.getProductId()).orElseThrow(
-                        () -> new IllegalArgumentException("Product not found")
+                        () -> new IllegalArgumentException("Không tìm thấy sản phẩm")
                     );
                     ghnItemDto.setName(product.getName());
                     ghnItemDto.setQuantity(item.getQuantity());

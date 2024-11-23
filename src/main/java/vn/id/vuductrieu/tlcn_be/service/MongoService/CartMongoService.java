@@ -32,7 +32,7 @@ public class CartMongoService {
         UserCollection userCollection = userRepo.findById(userId).orElse(null);
 
         if (userCollection == null) {
-            throw new IllegalArgumentException("User not found");
+            throw new IllegalArgumentException("Không tìm thấy người dùng");
         } else {
             List<ItemDocument> cart = userCollection.getCart();
             Optional<ItemDocument> existingItem = cart.stream()
@@ -81,7 +81,7 @@ public class CartMongoService {
         UserCollection userCollection = userRepo.findById(userId).orElse(null);
 
         if (userCollection == null) {
-            throw new IllegalArgumentException("User not found");
+            throw new IllegalArgumentException("Không tìm thấy người dùng");
         } else {
             return userCollection.getCart();
         }
@@ -93,7 +93,7 @@ public class CartMongoService {
         UserCollection userCollection = userRepo.findById(userId).orElse(null);
 
         if (userCollection == null) {
-            throw new IllegalArgumentException("User not found");
+            throw new IllegalArgumentException("Không tìm thấy người dùng");
         } else {
             userCollection.setCart(itemDocument);
             userRepo.save(userCollection);

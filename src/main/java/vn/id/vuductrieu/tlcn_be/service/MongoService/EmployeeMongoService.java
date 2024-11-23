@@ -18,11 +18,11 @@ public class EmployeeMongoService {
         EmployeeCollection employeeCollection = employeeRepo.findByAccount(employee.getAccount());
 
         if (employeeCollection == null) {
-            throw new IllegalArgumentException("Account not found");
+            throw new IllegalArgumentException("Không tìm thấy tài khoản");
         }
 
         if (!BCrypt.checkpw(employee.getPassword(), employeeCollection.getPassword())) {
-            throw new IllegalArgumentException("Password is incorrect");
+            throw new IllegalArgumentException("Sai mật khẩu");
         }
 
         return employeeCollection;
@@ -44,7 +44,7 @@ public class EmployeeMongoService {
         try {
             EmployeeCollection employeeCollection = employeeRepo.findByAccount(employee.getAccount());
             if (employeeCollection != null) {
-                throw new IllegalArgumentException("Account is already exist");
+                throw new IllegalArgumentException("Tài khoản đã tồn tại");
             }
             employee.setPassword(BCrypt.hashpw(employee.getPassword(), BCrypt.gensalt()));
             employeeRepo.insert(employee);
@@ -58,7 +58,7 @@ public class EmployeeMongoService {
         try {
             EmployeeCollection employeeCollection = employeeRepo.findById(employee.getId()).orElse(null);
             if (employeeCollection == null) {
-                throw new IllegalArgumentException("Employee not found");
+                throw new IllegalArgumentException("Không tìm thấy nhân viên");
             }
             // if field in employee is null, keep the old value
             if (employee.getName() != null) {
