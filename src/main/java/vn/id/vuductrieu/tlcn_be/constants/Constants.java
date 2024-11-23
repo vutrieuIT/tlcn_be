@@ -48,4 +48,17 @@ public class Constants {
             return value;
         }
     }
+
+    @RequiredArgsConstructor
+    public enum OrderStatus {
+        PENDING("Chờ xác nhận"),
+        CONFIRMED("Đã xác nhận"),
+        SHIPPING("Đang giao hàng"),
+        COMPLETED("Đã giao hàng"),
+        CANCELED("Đã hủy");
+        private final String value;
+        public String getValue() {
+            return value;
+        }
+    }
 }

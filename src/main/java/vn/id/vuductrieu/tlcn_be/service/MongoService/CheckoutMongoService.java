@@ -4,12 +4,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vn.id.vuductrieu.tlcn_be.config.VnPayConfig;
+import vn.id.vuductrieu.tlcn_be.constants.Constants;
 import vn.id.vuductrieu.tlcn_be.entity.OrderEntity;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.OrderCollection;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.UserCollection;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.document.ItemDocument;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.OrderRepo;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.UserRepo;
+import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -35,8 +37,10 @@ public class CheckoutMongoService {
 
     private final HttpServletRequest request;
 
+    private final PermissionService permissionService;
+
     public Map<String, String> checkout() {
-        String userId = "672e19dc3207000062004d32";
+        String userId = permissionService.getUserId();
         UserCollection userCollection = userRepo.findById(userId).orElse(null);
         if (userCollection == null) {
             throw new IllegalArgumentException("Không tìm thấy người dùng");
@@ -46,7 +50,7 @@ public class CheckoutMongoService {
 
         OrderCollection orderCollection = new OrderCollection();
         orderCollection.setUserId(userId);
-        orderCollection.setStatus("pending");
+        orderCollection.setStatus(Constants.OrderStatus.PENDING.getValue());
         Integer totalPrice = carts.stream().mapToInt(i -> i.getPrice() * i.getQuantity()).sum();
         orderCollection.setTotalBill(totalPrice);
         orderCollection.setQuantity(carts.size());
@@ -64,8 +68,6 @@ public class CheckoutMongoService {
         long vn2usd = 23200;
         long amount = amoutPay * 100 * vn2usd;
 
-        String vnp_TxnRef = billCode;
-
         String vnp_TmnCode = VnPayConfig.vnp_TmnCode;
 
         Map<String, String> vnp_Params = new HashMap<>();
@@ -75,8 +77,8 @@ public class CheckoutMongoService {
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
 
-        vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
+        vnp_Params.put("vnp_TxnRef", billCode);
+        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + billCode);
         vnp_Params.put("vnp_OrderType", orderType);
 
         vnp_Params.put("vnp_Locale", "vn");
