@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.id.vuductrieu.tlcn_be.constants.Constants;
 import vn.id.vuductrieu.tlcn_be.dto.mongodb.ProductMongoDto;
 import vn.id.vuductrieu.tlcn_be.dto.mongodb.RatingMongoDto;
+import vn.id.vuductrieu.tlcn_be.entity.mongodb.RatingCollection;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.ProductRepo;
+import vn.id.vuductrieu.tlcn_be.repository.mongodb.RatingRepo;
 import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.ProductMongoService;
 
@@ -29,6 +31,8 @@ public class ProductMongoController {
 
     private final PermissionService permissionService;
     private final ProductRepo productRepo;
+
+    private final RatingRepo ratingRepo;
 
 
     @GetMapping("/san-pham")
@@ -112,7 +116,11 @@ public class ProductMongoController {
     public ResponseEntity<?> deleteComment(@PathVariable String id) {
         try {
             if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
-                return ResponseEntity.status(403).body("Bạn không có quyền thao tác");
+                String userId = permissionService.getUserId();
+                RatingCollection rating = ratingRepo.findById(id).orElse(null);
+                if (rating == null || !rating.getUserId().equals(userId)) {
+                    return ResponseEntity.status(403).body("Bạn không có quyền thao tác comment này");
+                }
             }
             productMongoService.deleteComment(id);
             return ResponseEntity.ok().body("Xóa bình luận thành công");

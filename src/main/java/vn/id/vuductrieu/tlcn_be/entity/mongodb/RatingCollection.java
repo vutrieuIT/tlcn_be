@@ -11,6 +11,8 @@ public class RatingCollection {
 
     private String userId;
 
+    private String username;
+
     private String productId;
 
     private Integer rating;
