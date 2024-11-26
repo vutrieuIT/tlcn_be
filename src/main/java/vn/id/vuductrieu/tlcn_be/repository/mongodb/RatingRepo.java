@@ -6,5 +6,5 @@ import vn.id.vuductrieu.tlcn_be.entity.mongodb.RatingCollection;
 import java.util.List;
 
 public interface RatingRepo extends MongoRepository<RatingCollection, String> {
-    List<RatingCollection> findByProductId(Integer id);
+    List<RatingCollection> findByProductId(String id);
 }

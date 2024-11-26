@@ -92,7 +92,7 @@ public class ProductMongoController {
     }
 
     @GetMapping("/san-pham/comment/{id}")
-    public ResponseEntity getCommentByCellphoneId(@PathVariable Integer id) {
+    public ResponseEntity getCommentByCellphoneId(@PathVariable String id) {
         try {
             return ResponseEntity.ok(productMongoService.getCommentByCellphoneId(id));
         } catch (Exception e) {

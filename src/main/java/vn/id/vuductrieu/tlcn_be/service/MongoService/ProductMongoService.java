@@ -69,7 +69,7 @@ public class ProductMongoService {
         ratingRepo.deleteById(id);
     }
 
-    public List<RatingCollection> getCommentByCellphoneId(Integer id) {
+    public List<RatingCollection> getCommentByCellphoneId(String id) {
         return ratingRepo.findByProductId(id);
     }
 
