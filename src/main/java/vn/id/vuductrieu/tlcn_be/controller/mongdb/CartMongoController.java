@@ -35,7 +35,7 @@ public class CartMongoController {
     public ResponseEntity<?> addToCart(@RequestBody ItemDocument itemDocument) {
         try {
             cartMongoService.addToCart(itemDocument);
-            return ResponseEntity.ok("Added to cart successfully");
+            return ResponseEntity.ok("Thêm vào giỏ hàng thành công");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {

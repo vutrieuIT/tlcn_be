@@ -7,6 +7,8 @@ public class ItemDocument {
 
     private String productId;
 
+    private String productName;
+
     private String color;
 
     private Integer quantity;

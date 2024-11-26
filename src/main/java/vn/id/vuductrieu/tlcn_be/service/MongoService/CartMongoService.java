@@ -35,6 +35,9 @@ public class CartMongoService {
             throw new IllegalArgumentException("Không tìm thấy người dùng");
         } else {
             List<ItemDocument> cart = userCollection.getCart();
+            if (cart == null) {
+                cart = new ArrayList<>();
+            }
             Optional<ItemDocument> existingItem = cart.stream()
                 .filter(item -> item.getProductId().equals(itemDocument.getProductId()) && item.getColor().equals(itemDocument.getColor())
                     && item.getInternalMemory().equals(itemDocument.getInternalMemory())).findFirst();
