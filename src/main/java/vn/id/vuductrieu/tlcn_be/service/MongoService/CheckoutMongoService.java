@@ -41,8 +41,6 @@ public class CheckoutMongoService {
 
     private final PermissionService permissionService;
 
-    private final CheckoutService checkoutService;
-
     public Map<String, String> checkout(CheckoutMongoDto checkoutMongoDto) {
         String userId = permissionService.getUserId();
         UserCollection userCollection = userRepo.findById(userId).orElse(null);
@@ -60,6 +58,9 @@ public class CheckoutMongoService {
         orderCollection.setQuantity(carts.size());
         orderCollection.setItems(carts);
         orderRepo.save(orderCollection);
+
+        userCollection.setCart(new ArrayList<>());
+        userRepo.save(userCollection);
 
         String paymentUrl = createPaymentUrl(Long.valueOf(totalPrice), orderCollection.getId());
 
