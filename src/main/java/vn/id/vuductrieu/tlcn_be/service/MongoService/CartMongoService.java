@@ -90,7 +90,7 @@ public class CartMongoService {
         }
     }
 
-    public void deleteCart(List<ItemDocument> itemDocument) {
+    public void updateCart(List<ItemDocument> itemDocument) {
         String userId = permissionService.getUserId().toString();
 
         UserCollection userCollection = userRepo.findById(userId).orElse(null);

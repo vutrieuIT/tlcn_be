@@ -47,13 +47,14 @@ public class CartMongoController {
     @PutMapping("/cart")
     public ResponseEntity<?> updateCart(@RequestBody List<ItemDocument> itemDocument) {
         try {
-            cartMongoService.deleteCart(itemDocument);
-            return ResponseEntity.ok("Deleted cart successfully");
+            cartMongoService.updateCart(itemDocument);
+            return ResponseEntity.ok("Cập nhật giỏ hàng thành công");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+
 
 }
