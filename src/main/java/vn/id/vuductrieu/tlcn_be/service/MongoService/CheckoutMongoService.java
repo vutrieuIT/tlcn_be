@@ -5,12 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vn.id.vuductrieu.tlcn_be.config.VnPayConfig;
 import vn.id.vuductrieu.tlcn_be.constants.Constants;
+import vn.id.vuductrieu.tlcn_be.dto.mongodb.CheckoutMongoDto;
 import vn.id.vuductrieu.tlcn_be.entity.OrderEntity;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.OrderCollection;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.UserCollection;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.document.ItemDocument;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.OrderRepo;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.UserRepo;
+import vn.id.vuductrieu.tlcn_be.service.CheckoutService;
 import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 
 import java.net.URLEncoder;
@@ -39,7 +41,9 @@ public class CheckoutMongoService {
 
     private final PermissionService permissionService;
 
-    public Map<String, String> checkout() {
+    private final CheckoutService checkoutService;
+
+    public Map<String, String> checkout(CheckoutMongoDto checkoutMongoDto) {
         String userId = permissionService.getUserId();
         UserCollection userCollection = userRepo.findById(userId).orElse(null);
         if (userCollection == null) {
@@ -55,6 +59,7 @@ public class CheckoutMongoService {
         orderCollection.setTotalBill(totalPrice);
         orderCollection.setQuantity(carts.size());
         orderCollection.setItems(carts);
+        orderRepo.save(orderCollection);
 
         String paymentUrl = createPaymentUrl(Long.valueOf(totalPrice), orderCollection.getId());
 
