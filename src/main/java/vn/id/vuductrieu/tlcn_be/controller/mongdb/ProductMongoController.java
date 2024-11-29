@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import vn.id.vuductrieu.tlcn_be.constants.Constants;
+import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
 import vn.id.vuductrieu.tlcn_be.dto.mongodb.ProductMongoDto;
 import vn.id.vuductrieu.tlcn_be.dto.mongodb.RatingMongoDto;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.RatingCollection;
@@ -47,7 +47,7 @@ public class ProductMongoController {
     @RequestMapping(value = "/san-pham", method = {RequestMethod.POST, RequestMethod.PUT})
     public ResponseEntity saveProduct(@RequestBody ProductMongoDto productMongoDto) {
         try {
-            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+            if (!permissionService.checkRole(MyConstants.Role.EMPLOYEE.getValue(), MyConstants.Role.ADMIN.getValue())) {
                 return ResponseEntity.status(403).body("Bạn không có quyền thao tác");
             }
             String id = productMongoService.saveProduct(productMongoDto);
@@ -81,7 +81,7 @@ public class ProductMongoController {
     @DeleteMapping("/san-pham/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable String id) {
         try {
-            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+            if (!permissionService.checkRole(MyConstants.Role.EMPLOYEE.getValue(), MyConstants.Role.ADMIN.getValue())) {
                 return ResponseEntity.status(403).body("Bạn không có quyền thao tác");
             }
             productMongoService.deleteProduct(id);
@@ -115,7 +115,7 @@ public class ProductMongoController {
     @DeleteMapping("/san-pham/comment/{id}")
     public ResponseEntity<?> deleteComment(@PathVariable String id) {
         try {
-            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+            if (!permissionService.checkRole(MyConstants.Role.EMPLOYEE.getValue(), MyConstants.Role.ADMIN.getValue())) {
                 String userId = permissionService.getUserId();
                 RatingCollection rating = ratingRepo.findById(id).orElse(null);
                 if (rating == null || !rating.getUserId().equals(userId)) {

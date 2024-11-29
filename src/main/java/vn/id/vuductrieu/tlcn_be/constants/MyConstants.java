@@ -2,7 +2,7 @@ package vn.id.vuductrieu.tlcn_be.constants;
 
 import lombok.RequiredArgsConstructor;
 
-public class Constants {
+public class MyConstants {
 
     @RequiredArgsConstructor
     public enum Role {
@@ -66,6 +66,22 @@ public class Constants {
     public enum PaymentStatus {
         PAID("Đã thanh toán"),
         UNPAID("Chưa thanh toán");
+        private final String value;
+        public String getValue() {
+            return value;
+        }
+    }
+
+    @RequiredArgsConstructor
+    public enum ProductStatus {
+//        "0": "hết hàng",
+//            "1": "sắp hêt hàng",
+//            "2": "còn hàng",
+//            "3": "ngừng kinh doanh"
+        OUT_OF_STOCK("0"),
+        RUNNING_OUT("1"),
+        IN_STOCK("2"),
+        STOP_SELLING("3");
         private final String value;
         public String getValue() {
             return value;

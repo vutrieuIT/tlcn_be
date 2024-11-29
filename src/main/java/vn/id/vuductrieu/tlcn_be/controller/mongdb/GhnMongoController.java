@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vn.id.vuductrieu.tlcn_be.constants.Constants;
+import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
 import vn.id.vuductrieu.tlcn_be.dto.mongodb.AdminOrderDto;
-import vn.id.vuductrieu.tlcn_be.entity.mongodb.OrderCollection;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.GhnMongoService;
 import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 import vn.id.vuductrieu.tlcn_be.utils.GhnUtil;
@@ -44,7 +43,7 @@ public class GhnMongoController {
     @PostMapping("/create-ship-order")
     public ResponseEntity createShipOrder(@RequestBody AdminOrderDto body) {
         try {
-            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+            if (!permissionService.checkRole(MyConstants.Role.EMPLOYEE.getValue(), MyConstants.Role.ADMIN.getValue())) {
                 return ResponseEntity.badRequest().body("Bạn không có quyền thao tác");
             }
             ghnMongoService.createShipOrder(body);
@@ -57,7 +56,7 @@ public class GhnMongoController {
     @PostMapping("/cancel-ship-order/{orderId}")
     public ResponseEntity cancelShipOrder(@PathVariable String orderId) {
         try {
-            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+            if (!permissionService.checkRole(MyConstants.Role.EMPLOYEE.getValue(), MyConstants.Role.ADMIN.getValue())) {
                 return ResponseEntity.badRequest().body("Bạn không có quyền thao tác");
             }
             ghnMongoService.cancelShipOrder(orderId);

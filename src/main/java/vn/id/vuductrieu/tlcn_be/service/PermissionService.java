@@ -3,7 +3,7 @@ package vn.id.vuductrieu.tlcn_be.service;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import vn.id.vuductrieu.tlcn_be.constants.Constants;
+import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
 import vn.id.vuductrieu.tlcn_be.utils.TokenUtils;
 
 import java.util.Objects;
@@ -28,7 +28,7 @@ public class PermissionService {
             }
 
             Integer role = tokenUtils.getClaimsFromToken(token.substring(7)).get("role", Integer.class);
-            return Objects.equals(role, Constants.Role.ADMIN.getValue());
+            return Objects.equals(role, MyConstants.Role.ADMIN.getValue());
         } catch (Exception e) {
             return false;
         }

@@ -2,7 +2,6 @@ package vn.id.vuductrieu.tlcn_be.controller.mongdb;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,9 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vn.id.vuductrieu.tlcn_be.constants.Constants;
-import vn.id.vuductrieu.tlcn_be.dto.OrderDetailDto;
-import vn.id.vuductrieu.tlcn_be.dto.OrderDto;
+import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.OrderCollection;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.OrderMongoService;
 import vn.id.vuductrieu.tlcn_be.service.PermissionService;
@@ -43,7 +40,7 @@ public class OrderMongoController {
     @GetMapping("/order")
     public ResponseEntity<?> getAllOrder(){
         try {
-            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+            if (!permissionService.checkRole(MyConstants.Role.EMPLOYEE.getValue(), MyConstants.Role.ADMIN.getValue())) {
                 return ResponseEntity.status(403).body(Map.of("message", "Bạn không có quyền thao tác"));
             }
             List<OrderCollection> orderCollections = orderMongoService.getAllOrder();
@@ -56,7 +53,7 @@ public class OrderMongoController {
     @PutMapping("/order")
     public ResponseEntity<?> updateOrder(@RequestBody JsonNode order){
         try {
-            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+            if (!permissionService.checkRole(MyConstants.Role.EMPLOYEE.getValue(), MyConstants.Role.ADMIN.getValue())) {
                 return ResponseEntity.status(403).body(Map.of("message", "Bạn không có quyền thao tác"));
             }
             orderMongoService.updateOrder(order.get("id").asText(), order.get("status").asText());
@@ -71,7 +68,7 @@ public class OrderMongoController {
     @GetMapping("/order-detail/{id}")
     public ResponseEntity<?> getOrderDetail(@PathVariable String id){
         try {
-            if (permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+            if (permissionService.checkRole(MyConstants.Role.EMPLOYEE.getValue(), MyConstants.Role.ADMIN.getValue())) {
                 OrderCollection orderCollection = orderMongoService.getOrderDetail(id, null);
                 return ResponseEntity.ok(Map.of("order", orderCollection));
             } else {

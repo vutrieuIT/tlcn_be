@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vn.id.vuductrieu.tlcn_be.constants.Constants;
+import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.EmployeeCollection;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.EmployeeMongoService;
 import vn.id.vuductrieu.tlcn_be.service.PermissionService;
@@ -50,7 +50,7 @@ public class EmployeeMongoController {
     @GetMapping
     public ResponseEntity<?> getAll() {
         try {
-            if (!permissionService.checkRole(Constants.Role.ADMIN.getValue())) {
+            if (!permissionService.checkRole(MyConstants.Role.ADMIN.getValue())) {
                 return ResponseEntity.badRequest().body("Bạn phải là admin");
             }
             return ResponseEntity.ok().body(employeeMongoService.getAll());
@@ -63,7 +63,7 @@ public class EmployeeMongoController {
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody EmployeeCollection employee) {
         try {
-            if (!permissionService.checkRole(Constants.Role.ADMIN.getValue())) {
+            if (!permissionService.checkRole(MyConstants.Role.ADMIN.getValue())) {
                 return ResponseEntity.badRequest().body("Bạn phải là admin");
             }
             employeeMongoService.create(employee);
@@ -79,7 +79,7 @@ public class EmployeeMongoController {
     @PutMapping("/update")
     public ResponseEntity<?> update(@RequestBody EmployeeCollection employee) {
         try {
-            if (!permissionService.checkRole(Constants.Role.ADMIN.getValue()) || !permissionService.getUserId().equals(employee.getId())) {
+            if (!permissionService.checkRole(MyConstants.Role.ADMIN.getValue()) || !permissionService.getUserId().equals(employee.getId())) {
                 return ResponseEntity.badRequest().body("Bạn không có quyền thao tác");
             }
             employeeMongoService.update(employee);

@@ -5,10 +5,9 @@ import io.github.cdimascio.dotenv.Dotenv;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-import vn.id.vuductrieu.tlcn_be.constants.Constants;
+import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
 import vn.id.vuductrieu.tlcn_be.dto.LoginDto;
 import vn.id.vuductrieu.tlcn_be.dto.UserDto;
-import vn.id.vuductrieu.tlcn_be.entity.UserEntity;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.UserCollection;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.UserRepo;
 import vn.id.vuductrieu.tlcn_be.service.EmailService;
@@ -36,7 +35,7 @@ public class UserMongoService {
         if (!BCrypt.checkpw(loginDto.password, userCollection.getPassword())) {
             throw new IllegalArgumentException("Mật khẩu không đúng");
         }
-        if (Objects.equals(userCollection.getStatus(), Constants.Status.INACTIVE.getValue())) {
+        if (Objects.equals(userCollection.getStatus(), MyConstants.Status.INACTIVE.getValue())) {
             throw new IllegalArgumentException("Tài khoản đã bị khóa");
         }
 
@@ -54,7 +53,7 @@ public class UserMongoService {
             UserCollection user = new UserCollection();
             user.setEmail(email);
             user.setName(payload.split("\"name\":\"")[1].split("\"")[0]);
-            user.setStatus(Constants.Status.ACTIVE.getValue());
+            user.setStatus(MyConstants.Status.ACTIVE.getValue());
             user.setPassword("");
             return userRepo.save(user);
         });
@@ -77,7 +76,7 @@ public class UserMongoService {
         userCollection.setEmail(userDto.email);
         userCollection.setName(userDto.name);
         userCollection.setPassword(BCrypt.hashpw(userDto.password, BCrypt.gensalt()));
-        userCollection.setStatus(Constants.Status.ACTIVE.getValue());
+        userCollection.setStatus(MyConstants.Status.ACTIVE.getValue());
         return userRepo.save(userCollection);
     }
 

@@ -6,14 +6,18 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
 import vn.id.vuductrieu.tlcn_be.dto.mongodb.ProductMongoDto;
 import vn.id.vuductrieu.tlcn_be.dto.mongodb.RatingMongoDto;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.ProductCollection;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.RatingCollection;
+import vn.id.vuductrieu.tlcn_be.entity.mongodb.document.SpecificationDocument;
+import vn.id.vuductrieu.tlcn_be.entity.mongodb.document.VariantDocument;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.ProductRepo;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.RatingRepo;
 import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,6 +50,13 @@ public class ProductMongoService {
     public String saveProduct(ProductMongoDto product) {
         ProductCollection productCollection = new ProductCollection();
         BeanUtils.copyProperties(product, productCollection);
+        if (product.getSpecifications() == null){
+            productCollection.setSpecifications(new ArrayList<>());
+        }
+        if (product.getVariants() == null){
+            productCollection.setVariants(new ArrayList<>());
+        }
+        setStatusProductByQuantity(productCollection);
         ProductCollection savedProduct = productRepo.save(productCollection);
         return savedProduct.getId();
     }
@@ -80,5 +91,20 @@ public class ProductMongoService {
     public List<ProductCollection> popularProduct(int i) {
         Pageable pageable = PageRequest.of(0, i);
         return productRepo.findAll(pageable).getContent();
+    }
+
+    public void setStatusProductByQuantity(ProductCollection productCollection) {
+        List<SpecificationDocument> specifications = productCollection.getSpecifications();
+        if (specifications != null) {
+            int sumQuantity = specifications.stream().mapToInt(SpecificationDocument::sumQuantity).sum();
+
+            if (sumQuantity > 10) {
+                productCollection.setStatus(MyConstants.ProductStatus.IN_STOCK.getValue());
+            } else if (sumQuantity > 0) {
+                productCollection.setStatus(MyConstants.ProductStatus.RUNNING_OUT.getValue());
+            } else {
+                productCollection.setStatus(MyConstants.ProductStatus.OUT_OF_STOCK.getValue());
+            }
+        }
     }
 }

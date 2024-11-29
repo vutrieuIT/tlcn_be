@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vn.id.vuductrieu.tlcn_be.constants.Constants;
+import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.DiscountCollection;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.DiscountMongoService;
 import vn.id.vuductrieu.tlcn_be.service.PermissionService;
@@ -38,7 +38,7 @@ public class DiscountMongoController {
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody DiscountCollection discount) {
         try {
-            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+            if (!permissionService.checkRole(MyConstants.Role.EMPLOYEE.getValue(), MyConstants.Role.ADMIN.getValue())) {
                 return ResponseEntity.badRequest().body("Bạn không có quyền thao tác");
             }
             discountMongoService.create(discount);
@@ -54,7 +54,7 @@ public class DiscountMongoController {
     @PutMapping("/update")
     public ResponseEntity<?> update(@RequestBody DiscountCollection discount) {
         try {
-            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+            if (!permissionService.checkRole(MyConstants.Role.EMPLOYEE.getValue(), MyConstants.Role.ADMIN.getValue())) {
                 return ResponseEntity.badRequest().body("Bạn không có quyền thao tác");
             }
             discountMongoService.update(discount);

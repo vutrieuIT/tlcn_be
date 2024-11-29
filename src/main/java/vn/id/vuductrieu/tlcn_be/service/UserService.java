@@ -7,7 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-import vn.id.vuductrieu.tlcn_be.constants.Constants;
+import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
 import vn.id.vuductrieu.tlcn_be.dto.LoginDto;
 import vn.id.vuductrieu.tlcn_be.dto.UserDto;
 import vn.id.vuductrieu.tlcn_be.entity.UserEntity;
@@ -15,7 +15,6 @@ import vn.id.vuductrieu.tlcn_be.repository.UserRepository;
 
 import java.util.Base64;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -41,8 +40,8 @@ public class UserService {
 
         String pwd = BCrypt.hashpw(UserDto.getPassword(), BCrypt.gensalt());
         userEntity.setPassword(pwd);
-        userEntity.setRole(Constants.Role.USER.getValue());
-        userEntity.setStatus(Constants.Status.ACTIVE.getValue());
+        userEntity.setRole(MyConstants.Role.USER.getValue());
+        userEntity.setStatus(MyConstants.Status.ACTIVE.getValue());
         return userRepository.save(userEntity);
     }
 
@@ -54,7 +53,7 @@ public class UserService {
         UserEntity userEntity = userRepository.findByEmail(loginDto.email).orElseThrow(
                 () -> new IllegalArgumentException("Email not found")
         );
-        if (userEntity.getStatus() == Constants.Status.INACTIVE.getValue()) {
+        if (userEntity.getStatus() == MyConstants.Status.INACTIVE.getValue()) {
             throw new IllegalArgumentException("account in inactive");
         }
         if (!BCrypt.checkpw(loginDto.password, userEntity.getPassword())) {
@@ -157,8 +156,8 @@ public class UserService {
             UserEntity user = new UserEntity();
             user.setEmail(email);
             user.setName(payload.split("\"name\":\"")[1].split("\"")[0]);
-            user.setRole(Constants.Role.USER.getValue());
-            user.setStatus(Constants.Status.ACTIVE.getValue());
+            user.setRole(MyConstants.Role.USER.getValue());
+            user.setStatus(MyConstants.Status.ACTIVE.getValue());
             user.setPassword("");
             return userRepository.save(user);
         });

@@ -4,15 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vn.id.vuductrieu.tlcn_be.config.VnPayConfig;
-import vn.id.vuductrieu.tlcn_be.constants.Constants;
+import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
 import vn.id.vuductrieu.tlcn_be.dto.mongodb.CheckoutMongoDto;
-import vn.id.vuductrieu.tlcn_be.entity.OrderEntity;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.OrderCollection;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.UserCollection;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.document.ItemDocument;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.OrderRepo;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.UserRepo;
-import vn.id.vuductrieu.tlcn_be.service.CheckoutService;
 import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 
 import java.net.URLEncoder;
@@ -52,7 +50,7 @@ public class CheckoutMongoService {
 
         OrderCollection orderCollection = new OrderCollection();
         orderCollection.setUserId(userId);
-        orderCollection.setStatus(Constants.OrderStatus.PENDING.getValue());
+        orderCollection.setStatus(MyConstants.OrderStatus.PENDING.getValue());
         Integer totalPrice = carts.stream().mapToInt(i -> i.getPrice() * i.getQuantity()).sum();
         orderCollection.setTotalBill(totalPrice);
         orderCollection.setQuantity(carts.size());
@@ -160,18 +158,18 @@ public class CheckoutMongoService {
         OrderCollection orderCollection = orderRepo.findById(mapParams.get("vnp_TxnRef")[0]).orElse(null);
         String vnp_ResponseCode = mapParams.get("vnp_ResponseCode")[0];
         if (vnp_ResponseCode.equals("24")) {
-            orderCollection.setStatus(Constants.PaymentStatus.UNPAID.getValue());
+            orderCollection.setStatus(MyConstants.PaymentStatus.UNPAID.getValue());
             orderCollection.setUpdatedAt(LocalDateTime.now());
             orderRepo.save(orderCollection);
             throw new IllegalArgumentException("Thanh toán thất bại");
         }
         if (vnp_ResponseCode.equals("00")) {
-            orderCollection.setStatus(Constants.PaymentStatus.PAID.getValue());
+            orderCollection.setStatus(MyConstants.PaymentStatus.PAID.getValue());
             orderCollection.setUpdatedAt(LocalDateTime.now());
             orderRepo.save(orderCollection);
             return;
         }
-        orderCollection.setStatus(Constants.PaymentStatus.UNPAID.getValue());
+        orderCollection.setStatus(MyConstants.PaymentStatus.UNPAID.getValue());
         orderCollection.setUpdatedAt(LocalDateTime.now());
         orderRepo.save(orderCollection);
         throw new IllegalArgumentException("Thanh toán thất bại");

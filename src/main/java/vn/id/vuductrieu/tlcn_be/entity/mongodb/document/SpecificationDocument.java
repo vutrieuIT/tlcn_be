@@ -1,6 +1,7 @@
 package vn.id.vuductrieu.tlcn_be.entity.mongodb.document;
 
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -15,5 +16,9 @@ public class SpecificationDocument {
     private static class ColorVariant {
         private String color;
         private Integer quantity;
+    }
+
+    public Integer sumQuantity() {
+        return colorVariant.stream().mapToInt(ColorVariant::getQuantity).sum();
     }
 }

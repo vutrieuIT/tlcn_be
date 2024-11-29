@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vn.id.vuductrieu.tlcn_be.constants.Constants;
+import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
 import vn.id.vuductrieu.tlcn_be.dto.LoginDto;
 import vn.id.vuductrieu.tlcn_be.dto.UserDto;
-import vn.id.vuductrieu.tlcn_be.entity.UserEntity;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.UserCollection;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.UserMongoService;
 import vn.id.vuductrieu.tlcn_be.service.PermissionService;
@@ -123,7 +122,7 @@ public class UserMongoController {
     @GetMapping("/all-user")
     public ResponseEntity<?> getAllUser() {
         try {
-            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+            if (!permissionService.checkRole(MyConstants.Role.EMPLOYEE.getValue(), MyConstants.Role.ADMIN.getValue())) {
                 return ResponseEntity.status(403).body("Bạn không có quyền");
             }
             List<UserCollection> userCollectionList = userMongoService.getAllUser();
@@ -138,7 +137,7 @@ public class UserMongoController {
     @PostMapping("/user/status")
     public ResponseEntity<?> getAllUser(@RequestBody UserCollection userCollection) {
         try {
-            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())) {
+            if (!permissionService.checkRole(MyConstants.Role.EMPLOYEE.getValue(), MyConstants.Role.ADMIN.getValue())) {
                 return ResponseEntity.status(403).body("Bạn không có quyền");
             }
             userMongoService.updateStatus(userCollection);
@@ -153,7 +152,7 @@ public class UserMongoController {
     @GetMapping("/user-info/{id}")
     public ResponseEntity<?> getUserInfo(@PathVariable String id) {
         try {
-            if (!permissionService.checkRole(Constants.Role.EMPLOYEE.getValue(), Constants.Role.ADMIN.getValue())
+            if (!permissionService.checkRole(MyConstants.Role.EMPLOYEE.getValue(), MyConstants.Role.ADMIN.getValue())
                 && !permissionService.getUserId().equals(id)) {
                 return ResponseEntity.status(403).body("Bạn không có quyền");
             }
