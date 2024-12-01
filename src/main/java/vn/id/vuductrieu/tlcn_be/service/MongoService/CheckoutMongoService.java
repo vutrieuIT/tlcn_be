@@ -69,8 +69,7 @@ public class CheckoutMongoService {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
-        long vn2usd = 23200;
-        long amount = amoutPay * 100 * vn2usd;
+        long amount = amoutPay * 100;
 
         String vnp_TmnCode = VnPayConfig.vnp_TmnCode;
 
