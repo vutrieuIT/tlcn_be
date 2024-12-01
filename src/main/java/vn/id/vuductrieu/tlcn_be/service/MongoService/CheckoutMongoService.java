@@ -55,6 +55,9 @@ public class CheckoutMongoService {
         orderCollection.setTotalBill(totalPrice);
         orderCollection.setQuantity(carts.size());
         orderCollection.setItems(carts);
+        orderCollection.setToAddress(checkoutMongoDto.getAddress());
+        orderCollection.setPhoneNumber(checkoutMongoDto.getPhone_number());
+        orderCollection.setCreatedAt(LocalDateTime.now());
         orderRepo.save(orderCollection);
 
         userCollection.setCart(new ArrayList<>());

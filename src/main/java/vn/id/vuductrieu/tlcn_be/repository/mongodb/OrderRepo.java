@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface OrderRepo extends MongoRepository<OrderCollection, String> {
 
-    @Query("{'user': ?0}")
+    @Query("{'userId': ?0}")
     List<OrderCollection> findAllByUserId(String userId);
 
     @Query("{'_id': ?0, 'user': ?1}")

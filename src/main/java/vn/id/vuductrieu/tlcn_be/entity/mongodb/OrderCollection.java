@@ -42,6 +42,8 @@ public class OrderCollection {
 
     private String note;
 
+    private String phoneNumber;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
