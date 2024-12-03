@@ -107,4 +107,8 @@ public class ProductMongoService {
             }
         }
     }
+
+    public List<ProductCollection> getChatbotProducts() {
+        return productRepo.findChatbotProducts();
+    }
 }

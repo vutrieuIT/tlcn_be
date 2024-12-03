@@ -128,4 +128,13 @@ public class ProductMongoController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+
+    @GetMapping("/san-pham/chatbot")
+    public ResponseEntity getChatbotProducts() {
+        try {
+            return ResponseEntity.ok(productMongoService.getChatbotProducts());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 }
