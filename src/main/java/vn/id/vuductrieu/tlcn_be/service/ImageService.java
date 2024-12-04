@@ -24,7 +24,7 @@ import java.util.List;
 public class ImageService {
 
     @Value("${myapp.url.predict}")
-    private final String PREDICT_URL;
+    private String PREDICT_URL;
 
     private final String STATIC_PATH = "static";
 
