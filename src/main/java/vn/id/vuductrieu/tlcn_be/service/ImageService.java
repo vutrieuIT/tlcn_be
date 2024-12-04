@@ -2,6 +2,7 @@ package vn.id.vuductrieu.tlcn_be.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,9 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 
 public class ImageService {
+
+    @Value("${myapp.url.predict}")
+    private final String PREDICT_URL;
 
     private final String STATIC_PATH = "static";
 
@@ -73,7 +77,7 @@ public class ImageService {
 
             // Perform the POST request with multipart form-data
             ResponseEntity<List<ResponsePredictDto>> requestEntity = webClient.post()
-                .uri("http://localhost:5001/predict")
+                .uri(PREDICT_URL + "/predict")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(body))  // Use fromMultipartData to handle file parts
                 .retrieve()
