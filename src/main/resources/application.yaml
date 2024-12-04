@@ -68,5 +68,5 @@ myapp:
     path-recommend-product: /recommend/product/
 ghn:
   token: ${GHN_TOKEN:token}
-  shop-id: ${GHN_SHOP_ID:shop_id}
+  shop-id: ${GHN_SHOP_ID:123456}
   url: ${GHN_URL:https://dev-online-gateway.ghn.vn/shiip/public-api}
