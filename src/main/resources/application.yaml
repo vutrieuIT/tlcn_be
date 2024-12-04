@@ -17,7 +17,11 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      database: ktln
+      database: kltn
+
+  web:
+    resources:
+      static-locations: file:/static
 
   mail:
     host: smtp.gmail.com
