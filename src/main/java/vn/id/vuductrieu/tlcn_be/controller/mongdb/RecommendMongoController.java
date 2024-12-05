@@ -7,10 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import vn.id.vuductrieu.tlcn_be.entity.ProductEntity;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.ProductCollection;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.RecommendMongoService;
-import vn.id.vuductrieu.tlcn_be.service.RecommendService;
 
 import java.util.List;
 

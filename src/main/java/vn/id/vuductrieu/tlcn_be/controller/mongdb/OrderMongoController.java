@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.OrderCollection;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.OrderMongoService;
-import vn.id.vuductrieu.tlcn_be.service.PermissionService;
+import vn.id.vuductrieu.tlcn_be.service.MongoService.PermissionService;
 
 import java.util.List;
 import java.util.Map;

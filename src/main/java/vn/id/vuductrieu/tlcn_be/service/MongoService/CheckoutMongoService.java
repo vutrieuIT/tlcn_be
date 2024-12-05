@@ -11,7 +11,6 @@ import vn.id.vuductrieu.tlcn_be.entity.mongodb.UserCollection;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.document.ItemDocument;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.OrderRepo;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.UserRepo;
-import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;

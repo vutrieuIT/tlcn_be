@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.EmployeeCollection;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.EmployeeMongoService;
-import vn.id.vuductrieu.tlcn_be.service.PermissionService;
+import vn.id.vuductrieu.tlcn_be.service.MongoService.PermissionService;
 import vn.id.vuductrieu.tlcn_be.utils.TokenUtils;
 
 import java.util.Map;

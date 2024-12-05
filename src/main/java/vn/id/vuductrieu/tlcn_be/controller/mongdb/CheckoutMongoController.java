@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vn.id.vuductrieu.tlcn_be.dto.CheckoutDto;
 import vn.id.vuductrieu.tlcn_be.dto.mongodb.CheckoutMongoDto;
-import vn.id.vuductrieu.tlcn_be.service.CheckoutService;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.CheckoutMongoService;
 
 import java.util.Map;

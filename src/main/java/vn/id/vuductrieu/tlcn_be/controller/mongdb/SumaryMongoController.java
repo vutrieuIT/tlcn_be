@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.SumaryMongoService;
-import vn.id.vuductrieu.tlcn_be.service.SumaryService;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/mongo/sumary")

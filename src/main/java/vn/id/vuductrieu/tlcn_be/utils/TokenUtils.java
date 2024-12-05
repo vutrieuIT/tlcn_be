@@ -1,12 +1,10 @@
 package vn.id.vuductrieu.tlcn_be.utils;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import vn.id.vuductrieu.tlcn_be.entity.UserEntity;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.EmployeeCollection;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.UserCollection;
 
@@ -23,18 +21,6 @@ public class TokenUtils {
 
     @Value("${myapp.security.jwt.expiration:3600000}")
     private long EXPIRATION_TIME;
-
-    // Tạo JWT token
-    public String generateToken(UserEntity userEntity) {
-        return Jwts.builder()
-                .setSubject(userEntity.getEmail())
-                .claim("role", userEntity.getRole())
-                .claim("id", userEntity.getId())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, getSigningKey())
-                .compact();
-    }
 
     public String generateMongoToken(UserCollection userCollection) {
         return Jwts.builder()

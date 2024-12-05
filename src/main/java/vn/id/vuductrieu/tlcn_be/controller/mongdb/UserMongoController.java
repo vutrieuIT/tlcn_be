@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
-import vn.id.vuductrieu.tlcn_be.dto.LoginDto;
-import vn.id.vuductrieu.tlcn_be.dto.UserDto;
+import vn.id.vuductrieu.tlcn_be.dto.mongodb.LoginMongoDto;
+import vn.id.vuductrieu.tlcn_be.dto.mongodb.UserMongoDto;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.UserCollection;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.UserMongoService;
-import vn.id.vuductrieu.tlcn_be.service.PermissionService;
+import vn.id.vuductrieu.tlcn_be.service.MongoService.PermissionService;
 import vn.id.vuductrieu.tlcn_be.utils.TokenUtils;
 
 import java.util.List;
@@ -31,9 +31,9 @@ public class UserMongoController {
     private final TokenUtils tokenUtils;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody(required = false) LoginDto loginDto) {
+    public ResponseEntity<?> login(@RequestBody(required = false) LoginMongoDto loginMongoDto) {
         try {
-            UserCollection userCollection = userMongoService.login(loginDto);
+            UserCollection userCollection = userMongoService.login(loginMongoDto);
             Map<String, Object> response = Map.of(
                 "id", userCollection.getId(),
                 "email", userCollection.getEmail(),
@@ -66,7 +66,7 @@ public class UserMongoController {
     }
 
     @PostMapping("/dang-ky")
-    public ResponseEntity<?> register(@RequestBody(required = false) UserDto UserDto) {
+    public ResponseEntity<?> register(@RequestBody(required = false) UserMongoDto UserDto) {
         try {
             UserCollection userCollection = userMongoService.register(UserDto);
             Map<String, Object> response = Map.of(
@@ -96,7 +96,7 @@ public class UserMongoController {
     }
 
     @PostMapping("/verify-code")
-    public ResponseEntity<?> changePasswordForgot(@RequestBody UserDto verifyCodeDto) {
+    public ResponseEntity<?> changePasswordForgot(@RequestBody UserMongoDto verifyCodeDto) {
         try {
             userMongoService.changePasswordForgot(verifyCodeDto);
             return ResponseEntity.ok().build();
@@ -108,7 +108,7 @@ public class UserMongoController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> changePassword(@RequestBody UserMongoDto userDto) {
         try {
             userMongoService.changePassword(userDto);
             return ResponseEntity.ok().build();

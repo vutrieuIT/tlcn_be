@@ -2,15 +2,12 @@ package vn.id.vuductrieu.tlcn_be.service.MongoService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import vn.id.vuductrieu.tlcn_be.dto.CartDto;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.UserCollection;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.document.ItemDocument;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.UserRepo;
-import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service

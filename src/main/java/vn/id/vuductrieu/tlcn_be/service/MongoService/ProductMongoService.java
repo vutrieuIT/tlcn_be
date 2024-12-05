@@ -12,10 +12,8 @@ import vn.id.vuductrieu.tlcn_be.dto.mongodb.RatingMongoDto;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.ProductCollection;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.RatingCollection;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.document.SpecificationDocument;
-import vn.id.vuductrieu.tlcn_be.entity.mongodb.document.VariantDocument;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.ProductRepo;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.RatingRepo;
-import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 
 import java.util.ArrayList;
 import java.util.List;

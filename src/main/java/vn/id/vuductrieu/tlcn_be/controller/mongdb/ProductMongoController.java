@@ -17,7 +17,7 @@ import vn.id.vuductrieu.tlcn_be.dto.mongodb.RatingMongoDto;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.RatingCollection;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.ProductRepo;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.RatingRepo;
-import vn.id.vuductrieu.tlcn_be.service.PermissionService;
+import vn.id.vuductrieu.tlcn_be.service.MongoService.PermissionService;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.ProductMongoService;
 
 import java.util.Map;

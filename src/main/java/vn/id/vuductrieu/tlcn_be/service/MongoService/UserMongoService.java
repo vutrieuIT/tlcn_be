@@ -6,11 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
-import vn.id.vuductrieu.tlcn_be.dto.LoginDto;
-import vn.id.vuductrieu.tlcn_be.dto.UserDto;
+import vn.id.vuductrieu.tlcn_be.dto.mongodb.LoginMongoDto;
+import vn.id.vuductrieu.tlcn_be.dto.mongodb.UserMongoDto;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.UserCollection;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.UserRepo;
-import vn.id.vuductrieu.tlcn_be.service.EmailService;
 
 import java.util.Base64;
 import java.util.List;
@@ -23,16 +22,16 @@ public class UserMongoService {
     private final UserRepo userRepo;
     private final EmailService emailService;
 
-    public UserCollection login(LoginDto loginDto) {
-        String error = validateLoginDto(loginDto);
+    public UserCollection login(LoginMongoDto loginMongoDto) {
+        String error = validateLoginDto(loginMongoDto);
         if (!error.isEmpty()) {
             throw new IllegalArgumentException(error);
         }
-        UserCollection userCollection = userRepo.findByEmail(loginDto.email).orElseThrow(
+        UserCollection userCollection = userRepo.findByEmail(loginMongoDto.email).orElseThrow(
             () -> new IllegalArgumentException("Không tìm thấy email")
         );
 
-        if (!BCrypt.checkpw(loginDto.password, userCollection.getPassword())) {
+        if (!BCrypt.checkpw(loginMongoDto.password, userCollection.getPassword())) {
             throw new IllegalArgumentException("Mật khẩu không đúng");
         }
         if (Objects.equals(userCollection.getStatus(), MyConstants.Status.INACTIVE.getValue())) {
@@ -60,7 +59,7 @@ public class UserMongoService {
         return userCollection;
     }
 
-    public UserCollection register(UserDto userDto) {
+    public UserCollection register(UserMongoDto userDto) {
         String error = validateUserDto(userDto);
         if (!error.isEmpty()) {
             throw new IllegalArgumentException(error);
@@ -92,18 +91,18 @@ public class UserMongoService {
         }
     }
 
-    private String validateLoginDto(LoginDto loginDto) {
+    private String validateLoginDto(LoginMongoDto loginMongoDto) {
         StringBuilder error = new StringBuilder();
-        if (loginDto.email == null || loginDto.email.isEmpty()) {
+        if (loginMongoDto.email == null || loginMongoDto.email.isEmpty()) {
             error.append("Email không được để trống");
         }
-        if (loginDto.password == null || loginDto.password.isEmpty()) {
+        if (loginMongoDto.password == null || loginMongoDto.password.isEmpty()) {
             error.append("Mật khẩu không được để trống");
         }
         return String.join(", ", error);
     }
 
-    private String validateUserDto(UserDto UserDto) {
+    private String validateUserDto(UserMongoDto UserDto) {
         StringBuilder error = new StringBuilder();
         if (UserDto.name == null || UserDto.name.isEmpty()) {
             error.append("Tên không được để trống");
@@ -134,7 +133,7 @@ public class UserMongoService {
         emailService.sendEmail(email, "Quên mật khẩu", "Mã đặt lại mật khẩu của bạn: " + code);
     }
 
-    public void changePasswordForgot(UserDto verifyCodeDto) {
+    public void changePasswordForgot(UserMongoDto verifyCodeDto) {
         UserCollection userCollection = userRepo.findByEmail(verifyCodeDto.email).orElseThrow(
             () -> new IllegalArgumentException("không tìm thấy email")
         );
@@ -149,7 +148,7 @@ public class UserMongoService {
         userRepo.save(userCollection);
     }
 
-    public void changePassword(UserDto userDto) {
+    public void changePassword(UserMongoDto userDto) {
         UserCollection userCollection = userRepo.findById(userDto.user_id).orElseThrow(
             () -> new IllegalArgumentException("Không tìm thấy user")
         );

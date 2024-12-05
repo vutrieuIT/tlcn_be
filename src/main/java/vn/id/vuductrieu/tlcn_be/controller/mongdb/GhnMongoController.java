@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
 import vn.id.vuductrieu.tlcn_be.dto.mongodb.AdminOrderDto;
 import vn.id.vuductrieu.tlcn_be.service.MongoService.GhnMongoService;
-import vn.id.vuductrieu.tlcn_be.service.PermissionService;
+import vn.id.vuductrieu.tlcn_be.service.MongoService.PermissionService;
 import vn.id.vuductrieu.tlcn_be.utils.GhnUtil;
 
 @RestController

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import vn.id.vuductrieu.tlcn_be.constants.MyConstants;
 import vn.id.vuductrieu.tlcn_be.entity.mongodb.DiscountCollection;
 import vn.id.vuductrieu.tlcn_be.repository.mongodb.DiscountRepo;
-import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 
 import java.util.List;
 
