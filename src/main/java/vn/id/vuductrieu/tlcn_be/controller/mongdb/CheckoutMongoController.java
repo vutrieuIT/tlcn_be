@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,17 @@ public class CheckoutMongoController {
     public ResponseEntity<?> checkout(@RequestBody CheckoutMongoDto checkoutMongoDto) {
         try {
             Map response = checkoutMongoService.checkout(checkoutMongoDto);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/payment/{orderId}")
+    public ResponseEntity<?> payment(@PathVariable String orderId) {
+        try {
+            Map response = checkoutMongoService.payment(orderId);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();

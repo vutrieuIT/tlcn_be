@@ -50,7 +50,7 @@ public class CheckoutMongoService {
         OrderCollection orderCollection = new OrderCollection();
         orderCollection.setUserId(userId);
         orderCollection.setStatus(MyConstants.OrderStatus.PENDING.getValue());
-        Integer totalPrice = carts.stream().mapToInt(i -> i.getPrice() * i.getQuantity()).sum();
+        int totalPrice = carts.stream().mapToInt(i -> i.getPrice() * i.getQuantity()).sum();
         orderCollection.setTotalBill(totalPrice);
         orderCollection.setQuantity(carts.size());
         orderCollection.setItems(carts);
@@ -62,7 +62,7 @@ public class CheckoutMongoService {
         userCollection.setCart(new ArrayList<>());
         userRepo.save(userCollection);
 
-        String paymentUrl = createPaymentUrl(Long.valueOf(totalPrice), orderCollection.getId());
+        String paymentUrl = createPaymentUrl((long) totalPrice, orderCollection.getId());
 
         return Map.of("redirect_url", paymentUrl);
     }
@@ -174,5 +174,20 @@ public class CheckoutMongoService {
         orderCollection.setUpdatedAt(LocalDateTime.now());
         orderRepo.save(orderCollection);
         throw new IllegalArgumentException("Thanh toán thất bại");
+    }
+
+    public Map<String, String> payment(String orderId) {
+        String userId = permissionService.getUserId();
+        UserCollection userCollection = userRepo.findById(userId).orElse(null);
+        if (userCollection == null) {
+            throw new IllegalArgumentException("Không tìm thấy người dùng");
+        }
+
+        OrderCollection orderCollection = orderRepo.findById(orderId).orElseThrow(
+            () -> new IllegalArgumentException("Không tìm thấy đơn hàng")
+        );
+
+        String paymentUrl = createPaymentUrl(Long.parseLong(orderCollection.getTotalBill().toString()), orderCollection.getId());
+        return Map.of("redirect_url", paymentUrl);
     }
 }
