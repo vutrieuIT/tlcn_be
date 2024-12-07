@@ -46,6 +46,7 @@ public class ProductMongoService {
     }
 
     public String saveProduct(ProductMongoDto product) {
+        String employeeId = permissionService.getUserId();
         ProductCollection productCollection = new ProductCollection();
         BeanUtils.copyProperties(product, productCollection);
         if (product.getSpecifications() == null){
@@ -55,6 +56,7 @@ public class ProductMongoService {
             productCollection.setVariants(new ArrayList<>());
         }
         setStatusProductByQuantity(productCollection);
+        productCollection.setEmployeeId(employeeId);
         ProductCollection savedProduct = productRepo.save(productCollection);
         return savedProduct.getId();
     }
@@ -66,7 +68,7 @@ public class ProductMongoService {
     public void createComment(RatingMongoDto ratingMongoDto) {
         RatingCollection rating = new RatingCollection();
         BeanUtils.copyProperties(ratingMongoDto, rating);
-        String userId = permissionService.getUserId().toString();
+        String userId = permissionService.getUserId();
         if (userId == null) {
             throw new EmptyResultDataAccessException("Không tìm thấy người dùng", 1);
         }

@@ -48,4 +48,6 @@ public class ProductCollection {
     private List<SpecificationDocument> specifications;
 
     private List<VariantDocument> variants;
+
+    private String employeeId;
 }
