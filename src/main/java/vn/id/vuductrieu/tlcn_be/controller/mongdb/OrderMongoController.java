@@ -72,7 +72,7 @@ public class OrderMongoController {
                 OrderCollection orderCollection = orderMongoService.getOrderDetail(id, null);
                 return ResponseEntity.ok(Map.of("order", orderCollection));
             } else {
-                String userId = permissionService.getUserId().toString();
+                String userId = permissionService.getUserId();
                 if (userId == null) {
                     return ResponseEntity.status(403).body(Map.of("message", "token invalid"));
                 }

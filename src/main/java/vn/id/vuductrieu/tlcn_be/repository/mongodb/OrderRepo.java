@@ -15,7 +15,7 @@ public interface OrderRepo extends MongoRepository<OrderCollection, String> {
     @Query("{'userId': ?0}")
     List<OrderCollection> findAllByUserId(String userId);
 
-    @Query("{'_id': ?0, 'user': ?1}")
+    @Query("{'_id': ?0, 'userId': ?1}")
     OrderCollection findByIdAndUserId(String id, String userId);
 
     @Aggregation(pipeline = {
