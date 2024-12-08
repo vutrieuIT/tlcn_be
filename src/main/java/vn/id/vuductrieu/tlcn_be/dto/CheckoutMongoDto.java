@@ -13,7 +13,10 @@ public class CheckoutMongoDto {
 
     private String email;
     private String full_name;
-
     private String phone_number;
     private String address;
+
+    private Integer[] addressCode;
+
+    private String discountCode;
 }

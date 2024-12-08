@@ -21,9 +21,10 @@ public class OrderMongoService {
         return orderRepo.findAll();
     }
 
-    public void updateOrder(String id, String status) {
+    public void updateOrder(String id, String status, String paymentStatus) {
         OrderCollection orderCollection = orderRepo.findById(id).orElseThrow(() -> new EmptyResultDataAccessException("Order not found", 1));
         orderCollection.setStatus(status);
+        orderCollection.setPaymentStatus(paymentStatus);
         orderRepo.save(orderCollection);
     }
 

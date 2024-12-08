@@ -52,4 +52,15 @@ public class DiscountMongoService {
             MyConstants.DiscountStatus.INACTIVE.getValue().equals(discount2.getStatus()) ? 2 : 1;
         return mapStaus2.compareTo(mapStaus1);
     }
+
+    public DiscountCollection getOne(String code) {
+        DiscountCollection discountCollection = discountRepo.findByCode(code);
+        if (discountCollection == null) {
+            throw new IllegalArgumentException("Không tìm thấy mã giảm giá");
+        }
+        if (discountCollection.getStatus().equals(MyConstants.DiscountStatus.USED.getValue())) {
+            throw new IllegalArgumentException("Mã giảm giá đã được sử dụng");
+        }
+        return discountCollection;
+    }
 }

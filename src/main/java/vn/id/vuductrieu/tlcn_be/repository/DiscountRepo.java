@@ -8,4 +8,7 @@ public interface DiscountRepo extends MongoRepository<DiscountCollection, String
 
     @Query("{'code': ?0, 'status': ?1}")
     DiscountCollection findByCodeAndStatus(String code, String value);
+
+    @Query("{'code': ?0}")
+    DiscountCollection findByCode(String code);
 }

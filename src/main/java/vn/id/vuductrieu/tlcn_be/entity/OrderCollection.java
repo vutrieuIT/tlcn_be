@@ -15,22 +15,19 @@ public class OrderCollection {
     @Id
     private String id;
 
-    private Integer totalBill;
-
-    private Integer totalWeight;
-
     private Integer quantity;
+    private Integer totalBill;
 
     private List<ItemDocument> items;
 
-    private String status;
-    private String userId;
+    private Integer totalWeight;
 
-    private String discountId;
+    private String status;
+
+    private String paymentType;
 
     private String paymentStatus;
 
-    private String paymentType;
 
     private String shippingOrderId;
 
@@ -47,4 +44,8 @@ public class OrderCollection {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private String userId;
+
+    private String discountId;
 }

@@ -61,8 +61,8 @@ public class GhnMongoService {
         ghnOrderDto.setFromProvinceName("TP. Hồ Chí Minh");
 
         ghnOrderDto.setToName(user.getName());
-        ghnOrderDto.setToPhone(user.getPhone());
-        ghnOrderDto.setToAddress(user.getAddress());
+        ghnOrderDto.setToPhone(order.getPhoneNumber());
+        ghnOrderDto.setToAddress(order.getToAddress());
         ghnOrderDto.setToWardName(address[1]);
         ghnOrderDto.setToDistrictName(address[2]);
         ghnOrderDto.setToProvinceName(address[3]);

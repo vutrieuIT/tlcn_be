@@ -56,7 +56,7 @@ public class OrderMongoController {
             if (!permissionService.checkRole(MyConstants.Role.EMPLOYEE.getValue(), MyConstants.Role.ADMIN.getValue())) {
                 return ResponseEntity.status(403).body(Map.of("message", "Bạn không có quyền thao tác"));
             }
-            orderMongoService.updateOrder(order.get("id").asText(), order.get("status").asText());
+            orderMongoService.updateOrder(order.get("id").asText(), order.get("status").asText(), order.get("paymentStatus").asText());
             return ResponseEntity.ok(Map.of("message", "Update order successfully"));
         } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.badRequest().body(Map.of("message", "Order not found"));
