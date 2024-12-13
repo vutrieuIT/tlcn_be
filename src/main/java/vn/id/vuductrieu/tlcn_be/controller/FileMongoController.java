@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/mongo/file")
+@RequestMapping("/api/file")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class FileMongoController {
 

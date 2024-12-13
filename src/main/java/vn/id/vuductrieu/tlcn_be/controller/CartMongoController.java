@@ -14,7 +14,7 @@ import vn.id.vuductrieu.tlcn_be.service.CartMongoService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/mongo")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class CartMongoController {
 

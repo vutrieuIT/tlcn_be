@@ -23,7 +23,7 @@ import vn.id.vuductrieu.tlcn_be.service.ProductMongoService;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/mongo")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ProductMongoController {
 

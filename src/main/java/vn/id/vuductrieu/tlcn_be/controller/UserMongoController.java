@@ -21,7 +21,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/mongo")
+@RequestMapping("/api")
 public class UserMongoController {
 
     private final UserMongoService userMongoService;

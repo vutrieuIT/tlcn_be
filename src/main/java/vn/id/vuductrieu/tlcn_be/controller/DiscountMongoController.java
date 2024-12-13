@@ -17,7 +17,7 @@ import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/mongo/discount")
+@RequestMapping("/api/discount")
 @RequiredArgsConstructor
 public class DiscountMongoController {
 

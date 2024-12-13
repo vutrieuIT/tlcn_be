@@ -18,7 +18,7 @@ import vn.id.vuductrieu.tlcn_be.utils.TokenUtils;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/mongo/employee")
+@RequestMapping("/api/employee")
 @RequiredArgsConstructor
 public class EmployeeMongoController {
 

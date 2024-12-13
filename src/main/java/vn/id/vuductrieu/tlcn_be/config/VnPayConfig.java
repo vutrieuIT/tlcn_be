@@ -23,7 +23,7 @@ import java.util.Random;
 public class VnPayConfig {
 
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_ReturnUrl = Dotenv.load().get("APP_HOST") + "/api/mongo/lazi-store/checkpayment";
+    public static String vnp_ReturnUrl = Dotenv.load().get("APP_HOST") + "/api/lazi-store/checkpayment";
     public static String vnp_TmnCode = "9W9C1DDC";
     public static String secretKey = "JS7LEGFLCE0CXWU8HU5ERGSJIDJ104Z1";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";

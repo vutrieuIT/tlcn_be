@@ -13,7 +13,7 @@ import vn.id.vuductrieu.tlcn_be.service.RecommendMongoService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/mongo/recommend")
+@RequestMapping("/api/recommend")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RecommendMongoController {
 

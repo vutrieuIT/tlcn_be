@@ -13,7 +13,7 @@ import vn.id.vuductrieu.tlcn_be.service.SumaryMongoService;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/api/mongo/sumary")
+@RequestMapping("/api/sumary")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SumaryMongoController {
 

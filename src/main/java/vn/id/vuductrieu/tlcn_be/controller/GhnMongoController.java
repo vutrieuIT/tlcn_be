@@ -15,7 +15,7 @@ import vn.id.vuductrieu.tlcn_be.service.PermissionService;
 import vn.id.vuductrieu.tlcn_be.utils.GhnUtil;
 
 @RestController
-@RequestMapping("/api/mongo/ghn")
+@RequestMapping("/api/ghn")
 @RequiredArgsConstructor
 public class GhnMongoController {
 

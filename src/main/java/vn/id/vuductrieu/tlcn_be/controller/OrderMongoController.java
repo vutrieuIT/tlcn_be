@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/mongo")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class OrderMongoController {
 

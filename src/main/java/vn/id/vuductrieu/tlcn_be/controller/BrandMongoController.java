@@ -9,7 +9,7 @@ import vn.id.vuductrieu.tlcn_be.service.BrandMongoService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/mongo")
+@RequestMapping("/api")
 public class BrandMongoController {
 
 
