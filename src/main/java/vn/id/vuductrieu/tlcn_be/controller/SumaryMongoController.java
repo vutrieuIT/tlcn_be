@@ -21,7 +21,7 @@ public class SumaryMongoController {
 
     @GetMapping("sales")
     public ResponseEntity<Object> getSales(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate, @RequestParam(required = false) String brand) {
         try {
             if (startDate == null) {
                 startDate = LocalDate.now().minusDays(30);
@@ -29,7 +29,7 @@ public class SumaryMongoController {
             if (endDate == null) {
                 endDate = LocalDate.now();
             }
-            return ResponseEntity.ok().body(sumaryMongoService.getSales(startDate, endDate));
+            return ResponseEntity.ok().body(sumaryMongoService.getSales(startDate, endDate, brand));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body(e.getMessage());
@@ -37,7 +37,8 @@ public class SumaryMongoController {
     }
 
     @GetMapping("revenue")
-    public ResponseEntity<Object> getRevenue(@RequestParam(required = false) LocalDate startDate, @RequestParam(required = false) LocalDate endDate) {
+    public ResponseEntity<Object> getRevenue(@RequestParam(required = false) LocalDate startDate, @RequestParam(required = false) LocalDate endDate,
+        @RequestParam(required = false) String brand) {
         try {
             if (startDate == null) {
                 startDate = LocalDate.now().minusDays(30);
@@ -45,7 +46,7 @@ public class SumaryMongoController {
             if (endDate == null) {
                 endDate = LocalDate.now();
             }
-            return ResponseEntity.ok().body(sumaryMongoService.getRevenue(startDate, endDate));
+            return ResponseEntity.ok().body(sumaryMongoService.getRevenue(startDate, endDate, brand));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }

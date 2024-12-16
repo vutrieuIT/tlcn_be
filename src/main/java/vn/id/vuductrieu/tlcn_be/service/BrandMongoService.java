@@ -12,9 +12,11 @@ import java.util.List;
 public class BrandMongoService {
 
     private final ProductRepo productRepo;
+
     public List<String> getBrand() {
         List<ProductCollection> productCollections = productRepo.findBrandOnly();
-        List<String> brands = productCollections.stream().map(ProductCollection::getBrandName).distinct().toList();
+        List<String> brands =
+            productCollections.stream().map(ProductCollection::getBrandName).map(String::toUpperCase).map(String::trim).distinct().toList();
         return brands;
     }
 }

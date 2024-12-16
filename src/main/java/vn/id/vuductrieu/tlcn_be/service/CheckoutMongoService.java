@@ -11,6 +11,8 @@ import vn.id.vuductrieu.tlcn_be.entity.OrderCollection;
 import vn.id.vuductrieu.tlcn_be.entity.ProductCollection;
 import vn.id.vuductrieu.tlcn_be.entity.UserCollection;
 import vn.id.vuductrieu.tlcn_be.entity.document.ItemDocument;
+import vn.id.vuductrieu.tlcn_be.entity.document.SpecificationDocument;
+import vn.id.vuductrieu.tlcn_be.entity.document.VariantDocument;
 import vn.id.vuductrieu.tlcn_be.repository.DiscountRepo;
 import vn.id.vuductrieu.tlcn_be.repository.OrderRepo;
 import vn.id.vuductrieu.tlcn_be.repository.ProductRepo;
@@ -46,6 +48,8 @@ public class CheckoutMongoService {
 
     private final PermissionService permissionService;
 
+    private final ProductMongoService productMongoService;
+
     public Map<String, String> checkout(CheckoutMongoDto checkoutMongoDto) {
         String userId = permissionService.getUserId();
         UserCollection userCollection = userRepo.findById(userId).orElse(null);
@@ -71,6 +75,28 @@ public class CheckoutMongoService {
             if (productCollection == null) {
                 throw new IllegalArgumentException("Sản phẩm không tồn tại");
             }
+            // minus quantity
+            SpecificationDocument specificationDocument = productCollection.getSpecifications().stream()
+                .filter(s -> s.getInternalMemory().equals(item.getInternalMemory())).findFirst().orElse(null);
+            if (specificationDocument == null) {
+                throw new IllegalArgumentException("Phiên bản " + item.getInternalMemory() + " không tồn tại");
+            }
+
+            SpecificationDocument.ColorVariant colorVariant = specificationDocument.getColorVariant().stream()
+                .filter(v -> v.getColor().equals(item.getColor())).findFirst().orElse(null);
+
+            if (colorVariant == null) {
+                throw new IllegalArgumentException("Màu " + item.getColor() + " không tồn tại");
+            }
+
+            // check quantity
+            if (colorVariant.getQuantity() < item.getQuantity()) {
+                throw new IllegalArgumentException("Số lượng sản phẩm " + productCollection.getName() + " màu " + item.getColor() + " phiên bản " + item.getInternalMemory() + " không đủ");
+            }
+            colorVariant.setQuantity(colorVariant.getQuantity() - item.getQuantity());
+            productMongoService.setStatusProductByQuantity(productCollection);
+
+            productRepo.save(productCollection);
             weight += productCollection.getWeight() * item.getQuantity();
         }
         orderCollection.setTotalWeight(weight);

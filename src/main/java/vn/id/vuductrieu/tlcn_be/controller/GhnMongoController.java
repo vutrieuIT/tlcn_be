@@ -27,17 +27,22 @@ public class GhnMongoController {
 
     @GetMapping("/province")
     public ResponseEntity getProvince() {
-        return ghnUtil.getProvince();
+        try {
+            return ResponseEntity.ok(ghnUtil.getProvince().getBody());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/district/{provinceId}")
     public ResponseEntity getDistrict(@PathVariable Integer provinceId) {
-        return ghnUtil.getDistrict(provinceId);
+        return ResponseEntity.ok(ghnUtil.getDistrict(provinceId).getBody());
     }
 
     @GetMapping("/ward/{districtId}")
     public ResponseEntity getWard(@PathVariable Integer districtId) {
-        return ghnUtil.getWard(districtId);
+        return ResponseEntity.ok(ghnUtil.getWard(districtId).getBody());
     }
 
     @PostMapping("/create-ship-order")

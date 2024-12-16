@@ -1,5 +1,6 @@
 package vn.id.vuductrieu.tlcn_be.controller;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -59,7 +60,7 @@ public class CheckoutMongoController {
 
     @GetMapping("/lazi-store/checkpayment")
     public ResponseEntity<?> checkPayment(HttpServletRequest request) {
-        String redirectUrl = "http://localhost:5173/lazi-store/checkpayment?vnp_ResponseCode=%s";
+        String redirectUrl = Dotenv.load().get("APP_HOST") + "/lazi-store/checkpayment?vnp_ResponseCode=%s";
         try {
             System.out.println("URL:" + request.getRequestURL());
             checkoutMongoService.checkPayment(request.getParameterMap(), request);
